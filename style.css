@@ -50,6 +50,11 @@ body {
   ul, ol {
     color: #ccc;
   }
+  ul,ol {
+    padding-left:  15px;
+    
+  
+  }
   
   hr {
     border-top: 1px solid #444;
