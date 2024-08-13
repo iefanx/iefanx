@@ -1,18 +1,37 @@
 body {
-    background-color: #222; /* Dark background */
-    color: #fff; /* Light text */
-    
-    margin: 10px;
-    padding: 10px;
+    background-color: #222;
+    color: #fff;
     font-family: "Inter", sans-serif;
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+  }
+  
+  /* Set a base font size for better scaling */
+  html {
+    font-size: 14px;
+  }
+  
+  /* Media queries for responsive design */
+  @media (min-width: 768px) {
+    /* Medium screens and up */
+    body {
+      font-size: 16px; /* Increase font size */
+    }
+  }
+  
+  @media (min-width: 992px) {
+    /* Large screens and up */
+    body {
+      font-size: 18px; /* Increase font size further */
+    }
   }
   
   /* Headers */
   h1, h2, h3 {
-    color: #f0f0f0; /* Slightly lighter header color */
+    color: #f0f0f0;
   }
   
   /* Paragraphs */
@@ -22,23 +41,36 @@ body {
   
   /* Links */
   a {
-    color: #007bff; /* Blue link color */
+    color: #007bff;
     text-decoration: none;
     font-weight: 600;
   }
   
   /* Other elements (adjust as needed) */
   ul, ol {
-    color: #ccc; /* Slightly grayed-out list items */
+    color: #ccc;
   }
   
   hr {
-    border-top: 1px solid #444; /* Subtle horizontal rule */
+    border-top: 1px solid #444;
   }
-  .container { /* Target the parent container */
-    display: flex; /* Enable flexbox for the container */
-    justify-content: center; /* Center the #content div horizontally */
+  
+  .container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column; /* Default to column layout for smaller screens */
+    align-items: center; /* Center content vertically */
   }
+  
   #content {
-    max-width: 1080px;
+    max-width: 90%; /* Adjust max-width for smaller screens */
+    padding: 15px;
   }
+  
+  /* Additional layout adjustments for larger screens */
+  @media (min-width: 768px) {
+    .container {
+      flex-direction: row; /* Change to row layout for medium screens and up */
+    }
+  }
+  
