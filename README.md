@@ -7,14 +7,3 @@
 🔭 Currently exploring **AI-powered voice assistants** and pushing the boundaries of **in-browser LLM applications**.  
 
 🌱 Continuously learning and expanding into areas like **high-performance native applications** and **post-quantum cryptography**.
-
-**Key Projects:**
-
-* **Nostr Protocol Backup:** Ensuring data reliability for 500k+ users.
-* **Monetization Mechanism:** Driving user engagement via secure transactions.
-* **Alby PWA:** Enhancing UX and boosting site performance.
-
-**Let's Connect!**
-[Email](your_email_here) | [LinkedIn](your_linkedin_profile_here) | [GitHub](your_github_profile_here) 
-
-**Ready to collaborate on innovative projects and shape the future of tech!** 
