@@ -1,4 +1,4 @@
-## iefan (ei-fa-an) - Cloud Architect & Linux aficionado
+## iefan (ei-fa-an) - Cloud Architect & Native/Web Programmer
 
 👋 I'm a **Cloud Solution Architect** crafting high-impact applications with a focus on **user experience** and **cutting-edge tech** like **AI** and **PWAs**.
 
