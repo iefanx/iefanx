@@ -7,3 +7,5 @@
 🔭 Currently exploring **AI-powered voice assistants** and pushing the boundaries of **in-browser LLM applications**.  
 
 🌱 Continuously learning and expanding into areas like **high-performance native applications** and **post-quantum cryptography**.
+
+**Check out my projects to learn more**
