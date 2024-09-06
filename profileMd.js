@@ -2,7 +2,7 @@ export const content = `# Iefan (ei-fa-an)
 
 **Cloud Solution Architect | Linux Administrator | Developer**
 
-[Email](mailto:iefanx@outlook.com) | [GitHub](https://github.com/iefanx) | [Blog](https://iefan.medium.com)  
+[Blog](https://iefan.medium.com) | [Email](mailto:iefanx@outlook.com) | [GitHub](https://github.com/iefanx)
 
 
 ## Summary
