@@ -1,6 +1,6 @@
-## iefan (ei-fa-an) - Cloud Architect & Native/Web Programmer
+## iefan (ei-fa-an) - Native/Web Programmer and Cloud Architect
 
-👋 I'm a **Cloud Solution Architect** crafting high-impact applications with a focus on **user experience** and **cutting-edge tech** like **AI** and **PWAs**.
+👋 I'm a **Cloud Solution Architect** crafting high-impact native and web applications with a focus on **user experience** and **cutting-edge tech** like **AI** and **PWAs**.
 
 🚀 I've built robust systems for platforms like **Nostr Protocol**, enhancing reliability and engagement. My expertise includes **cloud architecture (AWS, Azure), web development (React, Node.js), and AI integration**. I'm a passionate advocate for **decentralized tech** and an active **open-source contributor**.
 
