@@ -1,122 +1,150 @@
-<!DOCTYPE html>
+
+
+
+                    <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iefan | Cloud Solution Architect</title>
+    <title>Iefan - Cloud Solution Architect</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css"> <!-- Assuming you have custom styles here -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Roboto', sans-serif; }
+    </style>
 </head>
-<body class="bg-black text-white font-sans">
+<body class="bg-black text-white font-sans antialiased">
+
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-50 bg-black bg-opacity-90 shadow-md">
-        <div class="container mx-auto px-4 py-5 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold">Iefan</a>
-            <ul class="hidden md:flex space-x-6">
-                <li><a href="#about" class="hover:text-gray-300">About</a></li>
-                <li><a href="#skills" class="hover:text-gray-300">Skills</a></li>
-                <li><a href="#projects" class="hover:text-gray-300">Projects</a></li>
-                <li><a href="#contact" class="hover:text-gray-300">Contact</a></li>
+    <nav class="fixed top-0 w-full z-50 bg-black bg-opacity-95 backdrop-filter backdrop-blur-md transition-colors duration-300">
+        <div class="container mx-auto px-4 md:px-10 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl md:text-3xl font-extrabold text-white hover:text-gray-300 transition duration-300">Iefan</a>
+            <ul class="hidden md:flex space-x-8">
+                <li><a href="#about" class="text-lg font-medium text-gray-300 hover:text-white transition duration-300">About</a></li>
+                <li><a href="#skills" class="text-lg font-medium text-gray-300 hover:text-white transition duration-300">Skills</a></li>
+                <li><a href="#projects" class="text-lg font-medium text-gray-300 hover:text-white transition duration-300">Projects</a></li>
+                <li><a href="#contact" class="text-lg font-medium text-gray-300 hover:text-white transition duration-300">Contact</a></li>
             </ul>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="h-screen flex items-center justify-center text-center">
-        <div class="container mx-auto">
-            <h1 class="text-5xl md:text-7xl font-bold mb-4">Cloud Solution Architect</h1>
-            <p class="text-xl md:text-2xl mb-8">Delivering Scalable, Secure, and High-Impact Cloud Solutions</p>
-            <a href="#contact" class="bg-white text-black px-6 py-3 rounded-full hover:bg-gray-200 transition duration-300">Connect with Me</a>
+    <section class="h-screen flex items-center justify-center text-center bg-cover bg-center" style="background-image: url('your-background-image.jpg');">
+        <div class="container mx-auto px-4 md:px-10">
+            <h1 class="text-5xl md:text-8xl font-extrabold leading-tight mb-6 text-white">Cloud Solution Architect</h1>
+            <p class="text-xl md:text-2xl mb-10 text-gray-300">Crafting Scalable, Secure, and Innovative Cloud Solutions.</p>
+            <a href="#contact" class="inline-block bg-gradient-to-r from-blue-400 to-purple-600 hover:from-pink-500 hover:to-yellow-500 text-white px-8 py-4 rounded-full text-lg font-semibold transition duration-300 transform hover:scale-105">Get In Touch</a>
         </div>
     </section>
 
     <!-- About Section -->
-    <section id="about" class="py-20 bg-gray-800">
-        <div class="container mx-auto px-4 text-center">
-            <h2 class="text-4xl font-bold mb-8">About Me</h2>
-            <p class="text-lg leading-relaxed">
-                Experienced Cloud Architect with expertise in designing and implementing robust, scalable cloud architectures
-                for leading-edge applications. With over 2.5 years of experience across AWS, Azure, and DevOps environments, I bring a deep
-                understanding of cloud infrastructure, security, and backup systems. Passionate about open-source contributions and leveraging 
-                AI for cloud scalability, I’ve presented at top conferences and led transformative projects for global-scale platforms.
+    <section id="about" class="py-24 bg-gray-900">
+        <div class="container mx-auto px-4 md:px-10 text-center">
+            <h2 class="text-4xl md:text-5xl font-extrabold mb-12 text-white">About Me</h2>
+            <p class="text-lg md:text-xl leading-relaxed text-gray-300 max-w-3xl mx-auto">
+                With over 2.5 years immersed in AWS, Azure, and DevOps, I specialize in designing and implementing robust cloud architectures for cutting-edge applications. My expertise spans infrastructure, security, and backup systems, with a strong focus on leveraging open-source technologies and AI to enhance scalability and performance. I am passionate about sharing knowledge and have presented at leading conferences, driving innovation in global-scale platforms.
             </p>
         </div>
     </section>
 
     <!-- Skills Section -->
-    <section id="skills" class="py-20 bg-black">
-        <div class="container mx-auto px-4 text-center">
-            <h2 class="text-4xl font-bold mb-8">Core Skills</h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                <div class="bg-gray-700 p-4 rounded">AWS, Azure, GCP</div>
-                <div class="bg-gray-700 p-4 rounded">Linux Administration</div>
-                <div class="bg-gray-700 p-4 rounded">Kubernetes, Docker</div>
-                <div class="bg-gray-700 p-4 rounded">Terraform, IaC</div>
-                <div class="bg-gray-700 p-4 rounded">React, Next.js, PWAs</div>
-                <div class="bg-gray-700 p-4 rounded">CI/CD, GitLab, Jenkins</div>
-                <div class="bg-gray-700 p-4 rounded">PostgreSQL, DynamoDB</div>
-                <div class="bg-gray-700 p-4 rounded">Encryption, OAuth 2.0</div>
+    <section id="skills" class="py-24 bg-black">
+        <div class="container mx-auto px-4 md:px-10 text-center">
+            <h2 class="text-4xl md:text-5xl font-extrabold mb-12 text-white">Core Expertise</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg transform hover:scale-105 transition duration-300">
+                    <h3 class="text-lg font-semibold mb-2 text-white">Cloud Platforms</h3>
+                    <p class="text-base text-gray-300">AWS, Azure, GCP</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg transform hover:scale-105 transition duration-300">
+                    <h3 class="text-lg font-semibold mb-2 text-white">Infrastructure as Code</h3>
+                    <p class="text-base text-gray-300">Terraform, IaC</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg transform hover:scale-105 transition duration-300">
+                    <h3 class="text-lg font-semibold mb-2 text-white">Containerization</h3>
+                    <p class="text-base text-gray-300">Kubernetes, Docker</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg transform hover:scale-105 transition duration-300">
+                    <h3 class="text-lg font-semibold mb-2 text-white">Web Development</h3>
+                    <p class="text-base text-gray-300">React, Next.js, PWAs</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg transform hover:scale-105 transition duration-300">
+                    <h3 class="text-lg font-semibold mb-2 text-white">CI/CD & DevOps</h3>
+                    <p class="text-base text-gray-300">GitLab, Jenkins</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg transform hover:scale-105 transition duration-300">
+                    <h3 class="text-lg font-semibold mb-2 text-white">Databases</h3>
+                    <p class="text-base text-gray-300">PostgreSQL, DynamoDB</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg transform hover:scale-105 transition duration-300">
+                    <h3 class="text-lg font-semibold mb-2 text-white">System Administration</h3>
+                    <p class="text-base text-gray-300">Linux Administration</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg transform hover:scale-105 transition duration-300">
+                    <h3 class="text-lg font-semibold mb-2 text-white">Security</h3>
+                    <p class="text-base text-gray-300">Encryption, OAuth 2.0</p>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Projects Section -->
-    <section id="projects" class="py-20">
-        <div class="container mx-auto px-4">
-            <h2 class="text-4xl font-bold mb-8 text-center">Selected Projects</h2>
+    <section id="projects" class="py-24 bg-gray-900">
+        <div class="container mx-auto px-4 md:px-10">
+            <h2 class="text-4xl md:text-5xl font-extrabold mb-12 text-center text-white">Featured Projects</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Project Card Example -->
-                <div class="bg-gray-800 p-6 rounded shadow-md">
-                    <h3 class="text-2xl font-bold mb-2">NostrSync Backup Service</h3>
-                    <p class="text-gray-300 mb-4">Built a reliable backup system ensuring data consistency across relays for over 500,000 users.</p>
-                    <a href="https://nostrsync.vercel.app" target="_blank" class="text-blue-400 hover:underline">Learn More</a>
+                <div class="bg-gray-800 p-8 rounded-lg shadow-xl transform hover:scale-105 transition duration-300">
+                    <h3 class="text-2xl font-bold mb-4 text-white">NostrSync Backup Service</h3>
+                    <p class="text-base text-gray-300 mb-6">Developed a robust backup solution ensuring data consistency across relays for over 500,000 users, enhancing reliability and accessibility.</p>
+                    <a href="https://nostrsync.vercel.app" target="_blank" class="inline-block bg-gradient-to-r from-blue-400 to-purple-600 hover:from-pink-500 hover:to-yellow-500 text-white px-6 py-3 rounded-full text-lg font-semibold transition duration-300 transform hover:scale-105">Visit Project</a>
                 </div>
-                <div class="bg-gray-800 p-6 rounded shadow-md">
-                    <h3 class="text-2xl font-bold mb-2">zPay.live Monetization Platform</h3>
-                    <p class="text-gray-300 mb-4">Developed a seamless paywall service, enabling content creators to monetize digital assets via lightning wallets.</p>
-                    <a href="https://zPay.live" target="_blank" class="text-blue-400 hover:underline">Explore Project</a>
+                <div class="bg-gray-800 p-8 rounded-lg shadow-xl transform hover:scale-105 transition duration-300">
+                    <h3 class="text-2xl font-bold mb-4 text-white">zPay.live Monetization Platform</h3>
+                    <p class="text-base text-gray-300 mb-6">Designed and implemented a seamless paywall service, enabling content creators to monetize digital assets efficiently via lightning wallets.</p>
+                    <a href="https://zpay.live" target="_blank" class="inline-block bg-gradient-to-r from-blue-400 to-purple-600 hover:from-pink-500 hover:to-yellow-500 text-white px-6 py-3 rounded-full text-lg font-semibold transition duration-300 transform hover:scale-105">Explore Project</a>
                 </div>
-                <div class="bg-gray-800 p-6 rounded shadow-md">
-                    <h3 class="text-2xl font-bold mb-2">Alby PWA Transformation</h3>
-                    <p class="text-gray-300 mb-4">Led a caching strategy overhaul, transforming Alby’s app into a PWA, significantly improving latency and engagement.</p>
-                    <a href="https://webcore.live" target="_blank" class="text-blue-400 hover:underline">See Details</a>
+                <div class="bg-gray-800 p-8 rounded-lg shadow-xl transform hover:scale-105 transition duration-300">
+                    <h3 class="text-2xl font-bold mb-4 text-white">Alby PWA Transformation</h3>
+                    <p class="text-base text-gray-300 mb-6">Led a comprehensive caching strategy overhaul, transforming Alby’s application into a Progressive Web App, significantly boosting performance and user engagement.</p>
+                    <a href="https://webcore.live" target="_blank" class="inline-block bg-gradient-to-r from-blue-400 to-purple-600 hover:from-pink-500 hover:to-yellow-500 text-white px-6 py-3 rounded-full text-lg font-semibold transition duration-300 transform hover:scale-105">View Details</a>
                 </div>
-                <div class="bg-gray-800 p-6 rounded shadow-md">
-                    <h3 class="text-2xl font-bold mb-2">Aithena: Custom AI Models</h3>
-                    <p class="text-gray-300 mb-4">Empowers users to create custom AI models, enabling personalized, high-performance applications for non-tech users.</p>
-                    <a href="#" class="text-blue-400 hover:underline">Discover More</a>
+                <div class="bg-gray-800 p-8 rounded-lg shadow-xl transform hover:scale-105 transition duration-300">
+                    <h3 class="text-2xl font-bold mb-4 text-white">Aithena: Custom AI Models</h3>
+                    <p class="text-base text-gray-300 mb-6">Empowered users to create and deploy custom AI models, facilitating personalized and high-performance applications for individuals with varying technical expertise.</p>
+                    <a href="#" class="inline-block bg-gradient-to-r from-blue-400 to-purple-600 hover:from-pink-500 hover:to-yellow-500 text-white px-6 py-3 rounded-full text-lg font-semibold transition duration-300 transform hover:scale-105">Learn More</a>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="py-20 bg-gray-900">
-        <div class="container mx-auto px-4 text-center">
-            <h2 class="text-4xl font-bold mb-8">Get in Touch</h2>
-            <form class="max-w-lg mx-auto">
-                <div class="mb-4">
-                    <label for="name" class="block text-gray-300 mb-2">Name</label>
-                    <input type="text" id="name" class="w-full bg-gray-800 text-white p-3 rounded" required>
+    <section id="contact" class="py-24 bg-black">
+        <div class="container mx-auto px-4 md:px-10 text-center">
+            <h2 class="text-4xl md:text-5xl font-extrabold mb-12 text-white">Get In Touch</h2>
+            <form class="max-w-2xl mx-auto">
+                <div class="mb-6">
+                    <input type="text" id="name" placeholder="Name" class="w-full bg-gray-800 text-white p-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
                 </div>
-                <div class="mb-4">
-                    <label for="email" class="block text-gray-300 mb-2">Email</label>
-                    <input type="email" id="email" class="w-full bg-gray-800 text-white p-3 rounded" required>
+                <div class="mb-6">
+                    <input type="email" id="email" placeholder="Email" class="w-full bg-gray-800 text-white p-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
                 </div>
-                <div class="mb-4">
-                    <label for="message" class="block text-gray-300 mb-2">Message</label>
-                    <textarea id="message" class="w-full bg-gray-800 text-white p-3 rounded" rows="4" required></textarea>
+                <div class="mb-8">
+                    <textarea id="message" placeholder="Your Message" class="w-full bg-gray-800 text-white p-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" rows="6" required></textarea>
                 </div>
-                <button type="submit" class="bg-white text-black px-6 py-3 rounded-full hover:bg-gray-200 transition duration-300">Send Message</button>
+                <button type="submit" class="bg-gradient-to-r from-blue-400 to-purple-600 hover:from-pink-500 hover:to-yellow-500 text-white px-8 py-4 rounded-full text-lg font-semibold transition duration-300 transform hover:scale-105">Send Message</button>
             </form>
         </div>
     </section>
 
-    <footer class="text-center py-4 bg-black bg-opacity-90">
-        <p>© 2024 Iefan | Cloud Solutions Architect | All Rights Reserved</p>
+    <!-- Footer -->
+    <footer class="text-center py-6 bg-black bg-opacity-95 backdrop-filter backdrop-blur-md">
+        <p class="text-gray-400">© 2024 Iefan | Cloud Solutions Architect | All Rights Reserved</p>
     </footer>
 
-    <!-- Smooth Scroll -->
+    <!-- Smooth Scroll Script -->
     <script>
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
