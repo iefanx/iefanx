@@ -14,7 +14,7 @@
         }
         .contact-link {
             display: inline-block;
-            margin: 0 10px;
+            margin: 5px 10px;
             padding: 10px 15px;
             color: white;
             background-color: #1e293b;
@@ -26,6 +26,14 @@
         .contact-link:hover {
             background-color: #374151;
             transform: scale(1.05);
+        }
+        .profile-picture {
+            border-radius: 50%;
+            border: 4px solid #4A5568;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            margin: 0 auto 20px;
         }
     </style>
 </head>
@@ -47,58 +55,65 @@
     <!-- Hero Section -->
     <section class="h-screen flex items-center justify-center text-center bg-cover bg-center" style="background-image: url('your-background-image.jpg');">
         <div class="container mx-auto px-6">
-            <h1 class="text-6xl md:text-8xl font-extrabold leading-tight mb-6">Cloud Solution Architect</h1>
-            <p class="text-2xl text-gray-300 mb-8">Crafting Scalable, Secure, and Innovative Cloud Solutions.</p>
-            <a href="#contact" class="bg-gradient-to-r from-blue-400 to-purple-600 hover:from-pink-500 hover:to-yellow-500 text-white px-10 py-4 rounded-full text-lg font-semibold transition">Get In Touch</a>
+            <img src="your-picture.jpg" alt="Iefan Profile" class="profile-picture">
+            <h1 class="text-5xl sm:text-6xl md:text-7xl font-extrabold leading-tight mb-6">Cloud Solution Architect</h1>
+            <p class="text-lg sm:text-xl md:text-2xl text-gray-300 mb-8">Crafting Scalable, Secure, and Innovative Cloud Solutions.</p>
+            <a href="#contact" class="bg-gradient-to-r from-blue-400 to-purple-600 hover:from-pink-500 hover:to-yellow-500 text-white px-8 py-3 sm:px-10 sm:py-4 rounded-full text-lg font-semibold transition">Get In Touch</a>
         </div>
     </section>
 
     <!-- About Section -->
-    <section id="about" class="py-24 bg-gray-900 text-center">
+    <section id="about" class="py-16 bg-gray-900 text-center">
         <div class="container mx-auto px-6">
-            <h2 class="text-4xl font-extrabold mb-8">About Me</h2>
-            <p class="text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed">
-                With over 2.5 years immersed in AWS, Azure, and DevOps, I specialize in designing and implementing robust cloud architectures for cutting-edge applications. My expertise spans infrastructure, security, and backup systems, with a strong focus on leveraging open-source technologies and AI to enhance scalability and performance. I am passionate about sharing knowledge and have presented at leading conferences, driving innovation in global-scale platforms.
+            <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">About Me</h2>
+            <p class="text-base sm:text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                With over 2.5 years immersed in AWS, Azure, and DevOps, I specialize in designing and implementing robust cloud architectures for cutting-edge applications. My expertise spans infrastructure, security, and backup systems, with a strong focus on leveraging open-source technologies and AI to enhance scalability and performance.
             </p>
         </div>
     </section>
 
     <!-- Skills Section -->
-    <section id="skills" class="py-24 bg-black text-center">
+    <section id="skills" class="py-16 bg-black text-center">
         <div class="container mx-auto px-6">
-            <h2 class="text-4xl font-extrabold mb-8">Core Expertise</h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <!-- Skill Cards -->
+            <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Core Expertise</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
                 <div class="bg-gray-800 p-6 rounded-lg shadow-lg transform hover:scale-105 transition">
                     <h3 class="text-lg font-semibold mb-2">Cloud Platforms</h3>
                     <p class="text-gray-300">AWS, Azure, GCP</p>
                 </div>
-                <!-- Add similar cards for other skills -->
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg transform hover:scale-105 transition">
+                    <h3 class="text-lg font-semibold mb-2">DevOps</h3>
+                    <p class="text-gray-300">CI/CD, Docker, Kubernetes</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg transform hover:scale-105 transition">
+                    <h3 class="text-lg font-semibold mb-2">Programming</h3>
+                    <p class="text-gray-300">Python, JavaScript</p>
+                </div>
+                <!-- Add more skills as needed -->
             </div>
         </div>
     </section>
 
     <!-- Projects Section -->
-    <section id="projects" class="py-24 bg-gray-900 text-center">
+    <section id="projects" class="py-16 bg-gray-900 text-center">
         <div class="container mx-auto px-6">
-            <h2 class="text-4xl font-extrabold mb-8">Featured Projects</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Project Cards -->
-                <div class="bg-gray-800 p-8 rounded-lg shadow-xl transform hover:scale-105 transition">
-                    <h3 class="text-2xl font-bold mb-4">NostrSync Backup Service</h3>
-                    <p class="text-gray-300 mb-6">Developed a robust backup solution ensuring data consistency across relays for over 500,000 users.</p>
+            <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Featured Projects</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg transform hover:scale-105 transition">
+                    <h3 class="text-lg font-bold mb-2">NostrSync Backup Service</h3>
+                    <p class="text-gray-300 mb-4">Developed a robust backup solution ensuring data consistency across relays for over 500,000 users.</p>
                     <a href="https://nostrsync.vercel.app" class="contact-link">Visit Project</a>
                 </div>
-                <!-- Add similar cards for other projects -->
+                <!-- Add more project cards as needed -->
             </div>
         </div>
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="py-24 bg-black text-center">
+    <section id="contact" class="py-16 bg-black text-center">
         <div class="container mx-auto px-6">
-            <h2 class="text-4xl font-extrabold mb-8">Get In Touch</h2>
-            <p class="text-lg text-gray-300 mb-8">Feel free to reach out to me via email or connect through GitHub and WhatsApp.</p>
+            <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Get In Touch</h2>
+            <p class="text-base sm:text-lg text-gray-300 mb-6">Feel free to reach out via email or connect through GitHub and WhatsApp.</p>
             <div>
                 <a href="mailto:iefan.work@outlook.com" class="contact-link">Email Me</a>
                 <a href="https://wa.me/YOUR_NUMBER" class="contact-link">WhatsApp</a>
@@ -108,8 +123,8 @@
     </section>
 
     <!-- Footer -->
-    <footer class="py-6 bg-black text-center">
-        <p class="text-gray-500">&copy; 2024 Iefan. All rights reserved.</p>
+    <footer class="py-4 bg-gray-800 text-center">
+        <p class="text-gray-500 text-sm">&copy; 2024 Iefan. All rights reserved.</p>
     </footer>
 
 </body>
