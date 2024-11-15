@@ -1,18 +1,131 @@
 <!DOCTYPE html>
-<html lang="en">  <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-  <title>iefan</title>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iefan | Cloud Solution Architect</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <div class="container">
-    <div id="content"></div>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script></script>  <script type="module" src="script.js"></script>
+<body class="bg-black text-white font-sans">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-black bg-opacity-90 shadow-md">
+        <div class="container mx-auto px-4 py-5 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold">Iefan</a>
+            <ul class="hidden md:flex space-x-6">
+                <li><a href="#about" class="hover:text-gray-300">About</a></li>
+                <li><a href="#skills" class="hover:text-gray-300">Skills</a></li>
+                <li><a href="#projects" class="hover:text-gray-300">Projects</a></li>
+                <li><a href="#contact" class="hover:text-gray-300">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="h-screen flex items-center justify-center text-center">
+        <div class="container mx-auto">
+            <h1 class="text-5xl md:text-7xl font-bold mb-4">Cloud Solution Architect</h1>
+            <p class="text-xl md:text-2xl mb-8">Delivering Scalable, Secure, and High-Impact Cloud Solutions</p>
+            <a href="#contact" class="bg-white text-black px-6 py-3 rounded-full hover:bg-gray-200 transition duration-300">Connect with Me</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-gray-800">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-8">About Me</h2>
+            <p class="text-lg leading-relaxed">
+                Experienced Cloud Architect with expertise in designing and implementing robust, scalable cloud architectures
+                for leading-edge applications. With over 2.5 years of experience across AWS, Azure, and DevOps environments, I bring a deep
+                understanding of cloud infrastructure, security, and backup systems. Passionate about open-source contributions and leveraging 
+                AI for cloud scalability, I’ve presented at top conferences and led transformative projects for global-scale platforms.
+            </p>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 bg-black">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-8">Core Skills</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                <div class="bg-gray-700 p-4 rounded">AWS, Azure, GCP</div>
+                <div class="bg-gray-700 p-4 rounded">Linux Administration</div>
+                <div class="bg-gray-700 p-4 rounded">Kubernetes, Docker</div>
+                <div class="bg-gray-700 p-4 rounded">Terraform, IaC</div>
+                <div class="bg-gray-700 p-4 rounded">React, Next.js, PWAs</div>
+                <div class="bg-gray-700 p-4 rounded">CI/CD, GitLab, Jenkins</div>
+                <div class="bg-gray-700 p-4 rounded">PostgreSQL, DynamoDB</div>
+                <div class="bg-gray-700 p-4 rounded">Encryption, OAuth 2.0</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold mb-8 text-center">Selected Projects</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Project Card Example -->
+                <div class="bg-gray-800 p-6 rounded shadow-md">
+                    <h3 class="text-2xl font-bold mb-2">NostrSync Backup Service</h3>
+                    <p class="text-gray-300 mb-4">Built a reliable backup system ensuring data consistency across relays for over 500,000 users.</p>
+                    <a href="https://nostrsync.vercel.app" target="_blank" class="text-blue-400 hover:underline">Learn More</a>
+                </div>
+                <div class="bg-gray-800 p-6 rounded shadow-md">
+                    <h3 class="text-2xl font-bold mb-2">zPay.live Monetization Platform</h3>
+                    <p class="text-gray-300 mb-4">Developed a seamless paywall service, enabling content creators to monetize digital assets via lightning wallets.</p>
+                    <a href="https://zPay.live" target="_blank" class="text-blue-400 hover:underline">Explore Project</a>
+                </div>
+                <div class="bg-gray-800 p-6 rounded shadow-md">
+                    <h3 class="text-2xl font-bold mb-2">Alby PWA Transformation</h3>
+                    <p class="text-gray-300 mb-4">Led a caching strategy overhaul, transforming Alby’s app into a PWA, significantly improving latency and engagement.</p>
+                    <a href="https://webcore.live" target="_blank" class="text-blue-400 hover:underline">See Details</a>
+                </div>
+                <div class="bg-gray-800 p-6 rounded shadow-md">
+                    <h3 class="text-2xl font-bold mb-2">Aithena: Custom AI Models</h3>
+                    <p class="text-gray-300 mb-4">Empowers users to create custom AI models, enabling personalized, high-performance applications for non-tech users.</p>
+                    <a href="#" class="text-blue-400 hover:underline">Discover More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-gray-900">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-8">Get in Touch</h2>
+            <form class="max-w-lg mx-auto">
+                <div class="mb-4">
+                    <label for="name" class="block text-gray-300 mb-2">Name</label>
+                    <input type="text" id="name" class="w-full bg-gray-800 text-white p-3 rounded" required>
+                </div>
+                <div class="mb-4">
+                    <label for="email" class="block text-gray-300 mb-2">Email</label>
+                    <input type="email" id="email" class="w-full bg-gray-800 text-white p-3 rounded" required>
+                </div>
+                <div class="mb-4">
+                    <label for="message" class="block text-gray-300 mb-2">Message</label>
+                    <textarea id="message" class="w-full bg-gray-800 text-white p-3 rounded" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="bg-white text-black px-6 py-3 rounded-full hover:bg-gray-200 transition duration-300">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="text-center py-4 bg-black bg-opacity-90">
+        <p>© 2024 Iefan | Cloud Solutions Architect | All Rights Reserved</p>
+    </footer>
+
+    <!-- Smooth Scroll -->
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>
