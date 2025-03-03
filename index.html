@@ -129,12 +129,68 @@
     ::-webkit-scrollbar-thumb:hover {
       background: #4a5568;
     }
+
+    /* Mobile optimizations */
+    @media (max-width: 768px) {
+      .container {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+      }
+
+      section {
+        padding-top: 3rem !important;
+        padding-bottom: 3rem !important;
+      }
+
+      .card-hover {
+        padding: 1rem !important;
+      }
+
+      .profile-picture {
+        width: 120px !important;
+        height: 120px !important;
+      }
+
+      h1 {
+        font-size: 2.25rem !important;
+        line-height: 2.5rem !important;
+      }
+
+      h2 {
+        font-size: 1.875rem !important;
+        line-height: 2.25rem !important;
+        margin-bottom: 1rem !important;
+      }
+
+      .hero-section {
+        padding-top: 5rem !important;
+        padding-bottom: 3rem !important;
+        min-height: auto !important;
+      }
+
+      .expertise-grid {
+        gap: 0.75rem !important;
+      }
+
+      .form-container {
+        padding: 1.25rem !important;
+      }
+
+      .nav-padding {
+        padding-top: 0.75rem !important;
+        padding-bottom: 0.75rem !important;
+      }
+
+      .section-spacing > * + * {
+        margin-top: 1.5rem !important;
+      }
+    }
   </style>
 </head>
 <body class="bg-black text-white antialiased">
 
   <!-- Navigation -->
-  <nav id="navbar" class="fixed top-0 w-full z-50 bg-black bg-opacity-90 backdrop-filter backdrop-blur-lg transition-all duration-300 border-b border-gray-800">
+  <nav id="navbar" class="fixed top-0 w-full z-50 bg-black bg-opacity-90 backdrop-filter backdrop-blur-lg transition-all duration-300 border-b border-gray-800 nav-padding">
     <div class="container mx-auto px-6 md:px-12 py-4 flex justify-between items-center">
       <a href="#" class="text-2xl font-bold text-white">
         <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">iefan.work</span>
@@ -163,7 +219,7 @@
   </nav>
 
   <!-- Hero Section -->
-  <section class="min-h-screen flex items-center justify-center pt-20 pb-12 grid-bg">
+  <section class="min-h-0 md:min-h-screen flex items-center justify-center pt-16 pb-8 md:pt-20 md:pb-12 grid-bg hero-section">
     <div class="container mx-auto px-6 py-12 md:py-24">
       <div class="text-center max-w-4xl mx-auto">
         <div class="relative mb-8 inline-block">
@@ -191,7 +247,7 @@
   </section>
 
   <!-- About Section -->
-  <section id="about" class="py-20 bg-gray-900 reveal">
+  <section id="about" class="py-12 md:py-20 bg-gray-900 reveal">
     <div class="container mx-auto px-6">
       <div class="max-w-4xl mx-auto">
         <h2 class="text-3xl md:text-4xl font-bold mb-8 text-center reveal">
@@ -225,8 +281,8 @@
   </section>
 
   <!-- Core Expertise Section -->
-  <section id="expertise" class="py-20 bg-black reveal">
-    <div class="container mx-auto px-6">
+  <section id="expertise" class="py-12 md:py-20 bg-black reveal">
+    <div class="container mx-auto px-4 md:px-6">
       <h2 class="text-3xl md:text-4xl font-bold mb-4 text-center reveal">
         <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
           Core Expertise
@@ -234,7 +290,7 @@
       </h2>
       <p class="text-gray-400 text-center max-w-3xl mx-auto mb-12 reveal">Leveraging modern technologies to build robust, scalable solutions</p>
       
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 reveal">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 expertise-grid reveal">
         <div class="card-hover bg-gray-900 bg-opacity-40 p-6 rounded-lg border border-gray-800">
           <div class="flex items-center mb-4">
             <div class="bg-blue-500 bg-opacity-20 p-3 rounded-lg mr-4">
@@ -335,8 +391,8 @@
   </section>
 
   <!-- Projects Section -->
-  <section id="projects" class="py-20 bg-gray-900 reveal">
-    <div class="container mx-auto px-6">
+  <section id="projects" class="py-12 md:py-20 bg-gray-900 reveal">
+    <div class="container mx-auto px-4 md:px-6">
       <h2 class="text-3xl md:text-4xl font-bold mb-4 text-center reveal">
         <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
           Featured Projects
@@ -344,7 +400,7 @@
       </h2>
       <p class="text-gray-400 text-center max-w-3xl mx-auto mb-12 reveal">Innovative solutions delivering real-world impact</p>
       
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 reveal">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 reveal">
         <!-- Project 1 -->
         <div class="card-hover bg-black bg-opacity-60 rounded-lg border border-gray-800 overflow-hidden">
           <div class="h-48 bg-gradient-to-r from-blue-900 to-indigo-900 flex items-center justify-center">
@@ -403,8 +459,8 @@
   </section>
 
   <!-- Contact Section -->
-  <section id="contact" class="py-20 bg-black reveal">
-    <div class="container mx-auto px-6">
+  <section id="contact" class="py-12 md:py-20 bg-black reveal">
+    <div class="container mx-auto px-4 md:px-6">
       <h2 class="text-3xl md:text-4xl font-bold mb-4 text-center reveal">
         <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
           Get in Touch
@@ -412,7 +468,7 @@
       </h2>
       <p class="text-gray-400 text-center max-w-3xl mx-auto mb-12 reveal">Whether you're looking to collaborate or just want to say hello, feel free to drop a message.</p>
       <div class="max-w-xl mx-auto">
-        <form action="https://formspree.io/f/{your_form_id}" method="POST" class="bg-gray-900 bg-opacity-60 p-8 rounded-lg border border-gray-800 reveal">
+        <form action="https://formspree.io/f/{your_form_id}" method="POST" class="bg-gray-900 bg-opacity-60 p-4 md:p-8 rounded-lg border border-gray-800 reveal form-container">
           <div class="mb-4">
             <label for="name" class="block text-gray-300 font-medium mb-2">Name</label>
             <input type="text" id="name" name="name" required class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded focus:outline-none focus:border-blue-500">
@@ -434,7 +490,7 @@
   </section>
 
   <!-- Footer -->
-  <footer class="bg-gray-900 py-6">
+  <footer class="bg-gray-900 py-4 md:py-6">
     <div class="container mx-auto px-6 text-center">
       <p class="text-gray-400 text-sm">&copy; 2025 iefan. All rights reserved.</p>
       <div class="flex justify-center mt-4 space-x-4">
