@@ -7,188 +7,482 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
   <style>
     body {
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Inter', sans-serif;
+      scroll-behavior: smooth;
+      background-color: #0a0a0a;
     }
-    /* Fade in animation for hero */
-    .fade-in {
-      animation: fadeIn 1s ease-in-out;
+    
+    .nav-link {
+      position: relative;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    /* Contact button styling */
-    .contact-link {
-      display: inline-block;
-      margin: 0.5rem;
-      padding: 0.75rem 1.25rem;
-      color: #fff;
+    
+    .nav-link:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -4px;
+      left: 0;
       background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-      border-radius: 9999px;
-      text-decoration: none;
-      font-weight: 500;
-      transition: transform 0.3s ease, background 0.3s ease;
+      transition: width 0.3s ease;
     }
-    .contact-link:hover {
-      transform: scale(1.05);
-      background: linear-gradient(90deg, #8b5cf6, #3b82f6);
+    
+    .nav-link:hover:after {
+      width: 100%;
     }
+    
     .profile-picture {
       border-radius: 50%;
-      border: 4px solid #4A5568;
+      border: 3px solid rgba(255, 255, 255, 0.1);
       width: 150px;
       height: 150px;
       object-fit: cover;
-      margin: 0 auto 20px;
+      margin: 0 auto;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+      transition: transform 0.5s ease, box-shadow 0.5s ease;
     }
-    /* Subtle scroll animations */
-    .section {
+    
+    .profile-picture:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px -15px rgba(59, 130, 246, 0.4);
+    }
+    
+    .card-hover {
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                  box-shadow 0.4s ease,
+                  background-color 0.4s ease;
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 30px -15px rgba(59, 130, 246, 0.25);
+      background-color: #1a1a1a;
+    }
+    
+    .gradient-button {
+      background-size: 200% auto;
+      transition: all 0.5s ease;
+    }
+    
+    .gradient-button:hover {
+      background-position: right center;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px -10px rgba(79, 70, 229, 0.4);
+    }
+    
+    .social-button {
+      transition: all 0.3s ease;
+    }
+    
+    .social-button:hover {
+      transform: translateY(-3px);
+    }
+    
+    .reveal {
       opacity: 0;
       transform: translateY(20px);
-      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+      transition: all 0.6s ease;
     }
-    .section.visible {
+    
+    .reveal.active {
       opacity: 1;
-      transform: none;
+      transform: translateY(0);
+    }
+    
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+    
+    .floating {
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    .grid-bg {
+      background-image: 
+        radial-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px),
+        radial-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px);
+      background-size: 50px 50px;
+      background-position: 0 0, 25px 25px;
+    }
+    
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #0a0a0a;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #2d3748;
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #4a5568;
     }
   </style>
-  <script>
-    // Intersection Observer for smooth scroll animations
-    document.addEventListener("DOMContentLoaded", function() {
-      const sections = document.querySelectorAll('.section');
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if(entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          }
-        });
-      }, { threshold: 0.1 });
-      sections.forEach(section => observer.observe(section));
-    });
-  </script>
 </head>
 <body class="bg-black text-white antialiased">
 
   <!-- Navigation -->
-  <nav class="fixed top-0 w-full z-50 bg-black bg-opacity-90 backdrop-blur-md transition-colors duration-300">
+  <nav id="navbar" class="fixed top-0 w-full z-50 bg-black bg-opacity-90 backdrop-filter backdrop-blur-lg transition-all duration-300 border-b border-gray-800">
     <div class="container mx-auto px-6 md:px-12 py-4 flex justify-between items-center">
-      <a href="#" class="text-3xl font-extrabold text-white transition hover:text-gray-300">iefan.work</a>
-      <ul class="hidden md:flex space-x-8">
-        <li><a href="#about" class="text-lg font-medium text-gray-300 hover:text-white transition">About</a></li>
-        <li><a href="#expertise" class="text-lg font-medium text-gray-300 hover:text-white transition">Expertise</a></li>
-        <li><a href="#projects" class="text-lg font-medium text-gray-300 hover:text-white transition">Projects</a></li>
-        <li><a href="#contact" class="text-lg font-medium text-gray-300 hover:text-white transition">Contact</a></li>
+      <a href="#" class="text-2xl font-bold text-white">
+        <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">iefan.work</span>
+      </a>
+      <ul class="hidden md:flex space-x-10">
+        <li><a href="#about" class="nav-link text-base font-medium text-gray-300 hover:text-white transition">About</a></li>
+        <li><a href="#expertise" class="nav-link text-base font-medium text-gray-300 hover:text-white transition">Expertise</a></li>
+        <li><a href="#projects" class="nav-link text-base font-medium text-gray-300 hover:text-white transition">Projects</a></li>
+        <li><a href="#contact" class="nav-link text-base font-medium text-gray-300 hover:text-white transition">Contact</a></li>
       </ul>
+      <button id="menu-toggle" class="md:hidden text-gray-300 hover:text-white">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="md:hidden hidden bg-gray-900 pb-4">
+      <div class="px-4 py-3 space-y-2">
+        <a href="#about" class="block py-2 px-4 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800 rounded-md">About</a>
+        <a href="#expertise" class="block py-2 px-4 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800 rounded-md">Expertise</a>
+        <a href="#projects" class="block py-2 px-4 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800 rounded-md">Projects</a>
+        <a href="#contact" class="block py-2 px-4 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800 rounded-md">Contact</a>
+      </div>
     </div>
   </nav>
 
   <!-- Hero Section -->
-  <section class="h-screen flex items-center justify-center text-center bg-cover bg-center fade-in" style="background-image: url('your-background-image.jpg');">
-    <div class="container mx-auto px-6">
-      <img src="https://i.imgur.com/tzu9CQW.jpeg" alt="Iefan Profile" class="profile-picture shadow-xl">
-      <h1 class="text-5xl md:text-7xl font-extrabold mb-6">Iefan</h1>
-      <p class="text-lg md:text-2xl text-gray-300 max-w-2xl mx-auto mb-8">
-        Cloud Solution Architect &amp; Developer<br>
-        Crafting innovative, scalable, and secure cloud infrastructures.
-      </p>
-      <a href="#contact" class="contact-link">Get in Touch</a>
+  <section class="min-h-screen flex items-center justify-center pt-20 pb-12 grid-bg">
+    <div class="container mx-auto px-6 py-12 md:py-24">
+      <div class="text-center max-w-4xl mx-auto">
+        <div class="relative mb-8 inline-block">
+          <div class="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 opacity-20 blur-xl"></div>
+          <img src="https://i.imgur.com/tzu9CQW.jpeg" alt="Iefan Profile" class="profile-picture w-32 h-32 md:w-40 md:h-40 relative z-10 floating">
+        </div>
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 text-white leading-tight">
+          <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+            iefan
+          </span>
+        </h1>
+        <p class="text-lg md:text-xl text-gray-300 mb-10 max-w-3xl mx-auto leading-relaxed">
+          Innovative <span class="font-semibold text-white">Cloud Solution Architect</span> leveraging <span class="font-semibold text-white">AWS</span> and <span class="font-semibold text-white">Azure</span> expertise with a foundation in <span class="font-semibold text-white">Linux</span> development to architect resilient, scalable infrastructure that transforms business operations.
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
+          <a href="#projects" class="w-full sm:w-auto gradient-button bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-3 rounded-md text-base font-medium transition shadow-lg">
+            View My Work
+          </a>
+          <a href="#contact" class="w-full sm:w-auto border border-gray-700 hover:border-gray-600 bg-transparent hover:bg-gray-800 text-gray-300 hover:text-white px-8 py-3 rounded-md text-base font-medium transition">
+            Get in Touch
+          </a>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- About Section -->
-  <section id="about" class="py-16 bg-gray-900 section">
-    <div class="container mx-auto px-6 text-center">
-      <h2 class="text-4xl md:text-5xl font-bold mb-6">About Me</h2>
-      <p class="text-base md:text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed">
-        With extensive experience in AWS, Azure, and Google Cloud, I design robust solutions that empower businesses to innovate and scale. I blend technical excellence with a strategic vision, ensuring every project is built to last.
-      </p>
+  <section id="about" class="py-20 bg-gray-900 reveal">
+    <div class="container mx-auto px-6">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-bold mb-8 text-center reveal">
+          <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">About Me</span>
+        </h2>
+        <div class="bg-black bg-opacity-40 p-8 rounded-lg border border-gray-800 shadow-xl mb-8 reveal">
+          <p class="text-base md:text-lg text-gray-300 leading-relaxed mb-6">
+            I'm a dedicated Cloud Solution Architect with over 3 years of experience building and optimizing scalable infrastructure across AWS, Azure, and GCP. My passion lies in creating efficient, reliable systems that drive innovation and solve complex business challenges.
+          </p>
+          <p class="text-base md:text-lg text-gray-300 leading-relaxed">
+            With a background in Linux system administration and a deep understanding of modern DevOps practices, I bring a unique perspective that bridges development and operations. I specialize in implementing infrastructure as code, containerization, and CI/CD pipelines that enhance productivity while maintaining robust security standards.
+          </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 reveal">
+          <div class="bg-black bg-opacity-40 p-6 rounded-lg border border-gray-800 text-center">
+            <div class="text-blue-400 text-4xl font-bold mb-2">3+</div>
+            <div class="text-gray-400 text-sm uppercase tracking-wider">Years Experience</div>
+          </div>
+          <div class="bg-black bg-opacity-40 p-6 rounded-lg border border-gray-800 text-center">
+            <div class="text-purple-400 text-4xl font-bold mb-2">25+</div>
+            <div class="text-gray-400 text-sm uppercase tracking-wider">Projects Completed</div>
+          </div>
+          <div class="bg-black bg-opacity-40 p-6 rounded-lg border border-gray-800 text-center">
+            <div class="text-indigo-400 text-4xl font-bold mb-2">12+</div>
+            <div class="text-gray-400 text-sm uppercase tracking-wider">Cloud Certifications</div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- Core Expertise Section -->
-  <section id="expertise" class="py-24 bg-gray-900 section">
-    <div class="container mx-auto px-4 md:px-10">
-      <h2 class="text-4xl md:text-5xl font-bold mb-12 text-center">Core Expertise</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-        <div class="bg-gray-800 p-6 rounded-lg shadow hover:shadow-lg transition transform hover:-translate-y-1">
-          <h3 class="text-xl font-semibold mb-2">Cloud Platforms</h3>
-          <p class="text-gray-300">AWS, Azure, GCP</p>
+  <section id="expertise" class="py-20 bg-black reveal">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4 text-center reveal">
+        <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+          Core Expertise
+        </span>
+      </h2>
+      <p class="text-gray-400 text-center max-w-3xl mx-auto mb-12 reveal">Leveraging modern technologies to build robust, scalable solutions</p>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 reveal">
+        <div class="card-hover bg-gray-900 bg-opacity-40 p-6 rounded-lg border border-gray-800">
+          <div class="flex items-center mb-4">
+            <div class="bg-blue-500 bg-opacity-20 p-3 rounded-lg mr-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-white">Cloud Platforms</h3>
+          </div>
+          <p class="text-gray-400">AWS, Azure, GCP with expertise in multi-cloud architecture and migration strategies</p>
         </div>
-        <div class="bg-gray-800 p-6 rounded-lg shadow hover:shadow-lg transition transform hover:-translate-y-1">
-          <h3 class="text-xl font-semibold mb-2">DevOps & Automation</h3>
-          <p class="text-gray-300">Terraform, Ansible, CI/CD</p>
+        
+        <div class="card-hover bg-gray-900 bg-opacity-40 p-6 rounded-lg border border-gray-800">
+          <div class="flex items-center mb-4">
+            <div class="bg-purple-500 bg-opacity-20 p-3 rounded-lg mr-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-white">Infrastructure as Code</h3>
+          </div>
+          <p class="text-gray-400">Terraform, CloudFormation, ARM templates for automated, consistent deployments</p>
         </div>
-        <div class="bg-gray-800 p-6 rounded-lg shadow hover:shadow-lg transition transform hover:-translate-y-1">
-          <h3 class="text-xl font-semibold mb-2">Containerization</h3>
-          <p class="text-gray-300">Docker, Kubernetes</p>
+        
+        <div class="card-hover bg-gray-900 bg-opacity-40 p-6 rounded-lg border border-gray-800">
+          <div class="flex items-center mb-4">
+            <div class="bg-indigo-500 bg-opacity-20 p-3 rounded-lg mr-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-white">Containerization</h3>
+          </div>
+          <p class="text-gray-400">Kubernetes, Docker, ECS orchestration and microservices architecture</p>
         </div>
-        <div class="bg-gray-800 p-6 rounded-lg shadow hover:shadow-lg transition transform hover:-translate-y-1">
-          <h3 class="text-xl font-semibold mb-2">Security & Compliance</h3>
-          <p class="text-gray-300">Encryption, OAuth 2.0</p>
+        
+        <div class="card-hover bg-gray-900 bg-opacity-40 p-6 rounded-lg border border-gray-800">
+          <div class="flex items-center mb-4">
+            <div class="bg-blue-500 bg-opacity-20 p-3 rounded-lg mr-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-white">Web Development</h3>
+          </div>
+          <p class="text-gray-400">React, Next.js, Progressive Web Apps with modern frameworks</p>
+        </div>
+        
+        <div class="card-hover bg-gray-900 bg-opacity-40 p-6 rounded-lg border border-gray-800">
+          <div class="flex items-center mb-4">
+            <div class="bg-purple-500 bg-opacity-20 p-3 rounded-lg mr-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-white">CI/CD & DevOps</h3>
+          </div>
+          <p class="text-gray-400">GitLab, GitHub Actions, Jenkins with automated testing and deployment</p>
+        </div>
+        
+        <div class="card-hover bg-gray-900 bg-opacity-40 p-6 rounded-lg border border-gray-800">
+          <div class="flex items-center mb-4">
+            <div class="bg-indigo-500 bg-opacity-20 p-3 rounded-lg mr-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-white">Databases</h3>
+          </div>
+          <p class="text-gray-400">PostgreSQL, DynamoDB, MongoDB with optimization and scaling strategies</p>
+        </div>
+        
+        <div class="card-hover bg-gray-900 bg-opacity-40 p-6 rounded-lg border border-gray-800">
+          <div class="flex items-center mb-4">
+            <div class="bg-blue-500 bg-opacity-20 p-3 rounded-lg mr-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-white">System Administration</h3>
+          </div>
+          <p class="text-gray-400">Linux administration, shell scripting, and automation for efficient operations</p>
+        </div>
+        
+        <div class="card-hover bg-gray-900 bg-opacity-40 p-6 rounded-lg border border-gray-800">
+          <div class="flex items-center mb-4">
+            <div class="bg-purple-500 bg-opacity-20 p-3 rounded-lg mr-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-white">Security</h3>
+          </div>
+          <p class="text-gray-400">Zero-trust architecture, encryption, OAuth 2.0, and compliance frameworks</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Projects Section -->
-  <section id="projects" class="py-24 bg-gray-900 section">
-    <div class="container mx-auto px-4 md:px-10">
-      <h2 class="text-4xl md:text-5xl font-bold mb-12 text-center">Featured Projects</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div class="bg-gray-800 p-8 rounded-lg shadow-xl hover:shadow-2xl transition transform hover:-translate-y-1">
-          <h3 class="text-2xl font-bold mb-4">NostrSync Backup Service</h3>
-          <p class="text-gray-300 mb-6">
-            Engineered a robust backup system ensuring data consistency for over 500,000 users, elevating reliability and accessibility.
-          </p>
-          <a href="https://nostrsync.vercel.app" target="_blank" class="contact-link">Visit Project</a>
+  <section id="projects" class="py-20 bg-gray-900 reveal">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4 text-center reveal">
+        <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+          Featured Projects
+        </span>
+      </h2>
+      <p class="text-gray-400 text-center max-w-3xl mx-auto mb-12 reveal">Innovative solutions delivering real-world impact</p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 reveal">
+        <!-- Project 1 -->
+        <div class="card-hover bg-black bg-opacity-60 rounded-lg border border-gray-800 overflow-hidden">
+          <div class="h-48 bg-gradient-to-r from-blue-900 to-indigo-900 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-blue-300 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 16l2.879-2.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div class="p-8">
+            <div class="flex justify-between items-start">
+              <h3 class="text-2xl font-bold mb-3 text-white">NostrSync Backup Service</h3>
+              <span class="bg-blue-900 bg-opacity-30 text-blue-400 text-xs font-medium px-2.5 py-1 rounded">AWS</span>
+            </div>
+            <p class="text-gray-400 mb-6 leading-relaxed">
+              Architected a distributed backup system ensuring critical data consistency across decentralized relays for 500,000+ users, with 99.99% uptime and automated disaster recovery capabilities.
+            </p>
+            <div class="flex flex-wrap gap-2 mb-6">
+              <span class="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded">AWS S3</span>
+              <span class="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded">Lambda</span>
+              <span class="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded">DynamoDB</span>
+              <span class="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded">Terraform</span>
+            </div>
+            <a href="https://nostrsync.vercel.app" target="_blank" class="gradient-button inline-block bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-indigo-500 hover:to-purple-600 text-white px-6 py-2 rounded-md text-sm font-medium transition">
+              View Project
+            </a>
+          </div>
         </div>
-        <div class="bg-gray-800 p-8 rounded-lg shadow-xl hover:shadow-2xl transition transform hover:-translate-y-1">
-          <h3 class="text-2xl font-bold mb-4">zPay.live Monetization Platform</h3>
-          <p class="text-gray-300 mb-6">
-            Developed a seamless paywall system, empowering content creators to effectively monetize digital assets.
-          </p>
-          <a href="https://zpay.live" target="_blank" class="contact-link">Explore Project</a>
-        </div>
-        <div class="bg-gray-800 p-8 rounded-lg shadow-xl hover:shadow-2xl transition transform hover:-translate-y-1">
-          <h3 class="text-2xl font-bold mb-4">Alby PWA Transformation</h3>
-          <p class="text-gray-300 mb-6">
-            Spearheaded a caching strategy overhaul that transformed an application into a high-performance Progressive Web App.
-          </p>
-          <a href="https://webcore.live" target="_blank" class="contact-link">View Details</a>
-        </div>
-        <div class="bg-gray-800 p-8 rounded-lg shadow-xl hover:shadow-2xl transition transform hover:-translate-y-1">
-          <h3 class="text-2xl font-bold mb-4">Aithena: Custom AI Models</h3>
-          <p class="text-gray-300 mb-6">
-            Enabled users to design and deploy tailored AI models, driving innovation in personalized, high-performance applications.
-          </p>
-          <a href="#" class="contact-link">Learn More</a>
+        
+        <!-- Project 2 -->
+        <div class="card-hover bg-black bg-opacity-60 rounded-lg border border-gray-800 overflow-hidden">
+          <div class="h-48 bg-gradient-to-r from-purple-900 to-pink-900 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-purple-300 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div class="p-8">
+            <div class="flex justify-between items-start">
+              <h3 class="text-2xl font-bold mb-3 text-white">zPay.live Monetization</h3>
+              <span class="bg-purple-900 bg-opacity-30 text-purple-400 text-xs font-medium px-2.5 py-1 rounded">Azure</span>
+            </div>
+            <p class="text-gray-400 mb-6 leading-relaxed">
+              Engineered a secure, high-performance paywall platform processing 100K+ daily microtransactions via Lightning Network, enabling content creators to monetize digital assets with minimal latency.
+            </p>
+            <div class="flex flex-wrap gap-2 mb-6">
+              <span class="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded">Azure Functions</span>
+              <span class="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded">Cosmos DB</span>
+              <span class="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded">Key Vault</span>
+              <span class="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded">Terraform</span>
+            </div>
+            <a href="https://zpay.live" target="_blank" class="gradient-button inline-block bg-gradient-to-r from-purple-500 to-pink-600 hover:from-pink-500 hover:to-purple-600 text-white px-6 py-2 rounded-md text-sm font-medium transition">
+              View Project
+            </a>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Contact Section -->
-  <section id="contact" class="py-14 bg-black section">
-    <div class="container mx-auto px-4 text-center">
-      <h2 class="text-4xl md:text-5xl font-bold mb-6">Get In Touch</h2>
-      <p class="text-gray-300 mb-6">
-        Whether you're interested in collaboration or simply want to connect, feel free to drop me an email or reach out via social media.
-      </p>
-      <div>
-        <a href="mailto:iefan.work@outlook.com" class="contact-link">Email</a>
-        <a href="https://wa.me/qr/HK34HP5HQZXXK1" class="contact-link">WhatsApp</a>
-        <a href="https://github.com/iefanx" class="contact-link">GitHub</a>
+  <section id="contact" class="py-20 bg-black reveal">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4 text-center reveal">
+        <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+          Get in Touch
+        </span>
+      </h2>
+      <p class="text-gray-400 text-center max-w-3xl mx-auto mb-12 reveal">Whether you're looking to collaborate or just want to say hello, feel free to drop a message.</p>
+      <div class="max-w-xl mx-auto">
+        <form action="https://formspree.io/f/{your_form_id}" method="POST" class="bg-gray-900 bg-opacity-60 p-8 rounded-lg border border-gray-800 reveal">
+          <div class="mb-4">
+            <label for="name" class="block text-gray-300 font-medium mb-2">Name</label>
+            <input type="text" id="name" name="name" required class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded focus:outline-none focus:border-blue-500">
+          </div>
+          <div class="mb-4">
+            <label for="email" class="block text-gray-300 font-medium mb-2">Email</label>
+            <input type="email" id="email" name="email" required class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded focus:outline-none focus:border-blue-500">
+          </div>
+          <div class="mb-4">
+            <label for="message" class="block text-gray-300 font-medium mb-2">Message</label>
+            <textarea id="message" name="message" rows="5" required class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded focus:outline-none focus:border-blue-500"></textarea>
+          </div>
+          <button type="submit" class="w-full gradient-button bg-gradient-to-r from-blue-500 to-purple-600 hover:from-purple-500 hover:to-blue-600 text-white px-6 py-3 rounded-md font-medium transition">
+            Send Message
+          </button>
+        </form>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="py-4 bg-gray-800 text-center">
-    <p class="text-gray-500 text-sm">&copy; 2024 Iefan. All rights reserved.</p>
+  <footer class="bg-gray-900 py-6">
+    <div class="container mx-auto px-6 text-center">
+      <p class="text-gray-400 text-sm">&copy; 2025 iefan. All rights reserved.</p>
+      <div class="flex justify-center mt-4 space-x-4">
+        <a href="https://github.com/yourusername" target="_blank" class="social-button text-gray-400 hover:text-white">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 0C5.372 0 0 5.372 0 12c0 5.303 3.438 9.8 8.205 11.387.6.111.82-.261.82-.577 0-.285-.01-1.04-.015-2.04-3.338.726-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.73.083-.73 1.205.085 1.84 1.237 1.84 1.237 1.07 1.835 2.807 1.305 3.492.998.108-.776.42-1.305.763-1.605-2.665-.305-5.467-1.332-5.467-5.93 0-1.31.468-2.38 1.235-3.22-.123-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.3 1.23a11.51 11.51 0 013.003-.404c1.02.005 2.045.137 3.003.404 2.29-1.553 3.297-1.23 3.297-1.23.653 1.653.241 2.873.118 3.176.77.84 1.233 1.91 1.233 3.22 0 4.61-2.807 5.624-5.48 5.921.431.372.815 1.102.815 2.222 0 1.606-.015 2.896-.015 3.286 0 .32.218.694.825.576C20.565 21.796 24 17.302 24 12c0-6.628-5.373-12-12-12z"/>
+          </svg>
+        </a>
+        <a href="https://linkedin.com/in/yourusername" target="_blank" class="social-button text-gray-400 hover:text-white">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M22.23 0H1.77C.792 0 0 .774 0 1.729v20.542C0 23.226.792 24 1.77 24h20.46c.978 0 1.77-.774 1.77-1.729V1.729C24 .774 23.208 0 22.23 0zM7.06 20.452H3.56V9h3.5v11.452zM5.31 7.635a2.03 2.03 0 010-4.06 2.03 2.03 0 010 4.06zm15.142 12.817h-3.5v-5.604c0-1.336-.027-3.056-1.86-3.056-1.86 0-2.144 1.45-2.144 2.948v5.712h-3.5V9h3.36v1.561h.048c.47-.888 1.62-1.82 3.33-1.82 3.562 0 4.218 2.343 4.218 5.387v6.324z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
   </footer>
 
+  <!-- Scripts -->
+  <script>
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Reveal on scroll
+    const reveals = document.querySelectorAll('.reveal');
+    const revealOptions = {
+      threshold: 0.1
+    };
+    
+    const revealOnScroll = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) {
+          entry.target.classList.add('active');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, revealOptions);
+
+    reveals.forEach(reveal => {
+      revealOnScroll.observe(reveal);
+    });
+    
+    // GSAP animation for profile picture
+    gsap.from('.profile-picture', { duration: 1, y: -50, opacity: 0, ease: 'bounce.out' });
+  </script>
 </body>
 </html>
