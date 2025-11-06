@@ -169,10 +169,74 @@ hr {
 }
 @media (max-width: 720px) {
 	body {
-		font-size: 18px;
+		font-size: 16px; /* Smaller font for more content */
 	}
 	main {
-		padding: 1em;
+		padding: 0.75em; /* Tighter padding */
+		max-width: calc(100% - 1em); /* More width usage */
+	}
+	h1 {
+		font-size: 2.2em; /* Scale down headings */
+	}
+	h2 {
+		font-size: 1.8em;
+	}
+	h3 {
+		font-size: 1.5em;
+	}
+	h4 {
+		font-size: 1.3em;
+	}
+	h5 {
+		font-size: 1.1em;
+	}
+	p {
+		margin-bottom: 0.8em; /* Tighter paragraph spacing */
+		line-height: 1.5; /* More compact line height */
+	}
+	.prose p {
+		margin-bottom: 1.5em; /* Scale down prose spacing */
+	}
+	blockquote {
+		font-size: 1.1em; /* Smaller blockquotes */
+		padding: 0 0 0 15px; /* Tighter padding */
+	}
+	pre {
+		padding: 1em; /* Smaller code block padding */
+		font-size: 0.9em; /* Smaller code font */
+	}
+}
+
+/* Extra small screens - even more compact */
+@media (max-width: 480px) {
+	body {
+		font-size: 15px; /* Even smaller font */
+		line-height: 1.5; /* More compact line height */
+	}
+	main {
+		padding: 0.5em; /* Minimal padding */
+		max-width: calc(100% - 0.5em); /* Maximum width usage */
+	}
+	h1 {
+		font-size: 1.9em; /* Further scale down headings */
+	}
+	h2 {
+		font-size: 1.6em;
+	}
+	h3 {
+		font-size: 1.3em;
+	}
+	h4 {
+		font-size: 1.2em;
+	}
+	h5 {
+		font-size: 1.05em;
+	}
+	p {
+		margin-bottom: 0.7em; /* Very tight spacing */
+	}
+	.prose p {
+		margin-bottom: 1.2em;
 	}
 }
 

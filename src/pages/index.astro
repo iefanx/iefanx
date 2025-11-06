@@ -1,8 +1,7 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 ---
 
 <!doctype html>
@@ -75,7 +74,6 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 				<li><strong>Resilience:</strong> Systems designed for long-term durability & security</li>
 			</ul>
 		</main>
-		<Footer />
 	</body>
 </html>
 
@@ -84,5 +82,34 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 		font-size: 1.1em;
 		margin: 1em 0 0.5em 0;
 		font-weight: 600;
+	}
+	
+	/* Mobile scaling for homepage */
+	@media (max-width: 720px) {
+		ul {
+			margin: 0.5em 0; /* Tighter list spacing */
+			padding-left: 1.2em; /* Smaller indent */
+		}
+		li {
+			margin-bottom: 0.5em; /* Compact list items */
+		}
+		h5 {
+			font-size: 1em; /* Smaller section headings */
+			margin: 0.8em 0 0.4em 0;
+		}
+	}
+	
+	@media (max-width: 480px) {
+		ul {
+			margin: 0.3em 0;
+			padding-left: 1em;
+		}
+		li {
+			margin-bottom: 0.3em;
+		}
+		h5 {
+			font-size: 0.95em;
+			margin: 0.6em 0 0.3em 0;
+		}
 	}
 </style>

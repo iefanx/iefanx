@@ -2,7 +2,6 @@
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 
@@ -248,6 +247,45 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 					font-size: 10px;
 					padding: 4px 6px;
 				}
+				
+				/* Additional mobile scaling for blog posts */
+				article {
+					line-height: 1.5; /* More compact line height */
+				}
+				
+				.hero-image {
+					margin: 0.5em 0; /* Smaller image margins */
+				}
+				
+				.date {
+					margin: 0.5em 0; /* Tighter date spacing */
+					font-size: 0.9em;
+				}
+				
+				.last-updated-on {
+					margin: 0.5em 0;
+					font-size: 0.85em;
+				}
+			}
+			
+			/* Extra compact for very small screens */
+			@media (max-width: 480px) {
+				article {
+					line-height: 1.4;
+				}
+				
+				.tts-controls {
+					margin: 0.5em 0;
+				}
+				
+				.hero-image {
+					margin: 0.3em 0;
+				}
+				
+				.date, .last-updated-on {
+					font-size: 0.8em;
+					margin: 0.3em 0;
+				}
 			}
 		</style>
 	</head>
@@ -325,7 +363,6 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				</div>
 			</article>
 		</main>
-		<Footer />
 	</body>
 </html>
 
