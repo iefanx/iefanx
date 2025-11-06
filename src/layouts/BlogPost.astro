@@ -167,11 +167,21 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				color: var(--text-secondary);
 				margin-top: 0.25em;
 			}
+			.tts-controls-row {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 12px;
+				margin-top: 12px;
+				flex-wrap: wrap;
+			}
+
 			.tts-speed-controls {
 				display: flex;
 				align-items: center;
-				gap: 0.5em;
+				gap: 6px;
 				font-size: 0.8em;
+				flex-shrink: 0;
 			}
 			.tts-speed-btn {
 				background: var(--bg-secondary);
@@ -194,14 +204,49 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				border-color: var(--accent);
 			}
 
+			.tts-voice-select {
+				background: var(--bg-secondary);
+				color: var(--text-primary);
+				border: 1px solid var(--border-color);
+				border-radius: 6px;
+				padding: 6px 8px;
+				font-size: 11px;
+				cursor: pointer;
+				width: 120px;
+				max-width: 120px;
+				min-width: 100px;
+				transition: all 0.2s ease;
+				flex-shrink: 1;
+			}
+
+			.tts-voice-select:hover,
+			.tts-voice-select:focus {
+				border-color: var(--accent);
+				outline: none;
+			}
+
 			@media (max-width: 720px) {
 				.tts-player {
 					width: 100%;
 					max-width: calc(100% - 2em);
 				}
+				.tts-controls-row {
+					gap: 8px;
+				}
+				
 				.tts-speed-controls {
-					flex-wrap: wrap;
-					gap: 0.25em;
+					gap: 4px;
+				}
+				
+				.tts-speed-btn {
+					padding: 4px 8px;
+					font-size: 11px;
+				}
+				
+				.tts-voice-select {
+					width: 100px;
+					font-size: 10px;
+					padding: 4px 6px;
 				}
 			}
 		</style>
@@ -260,12 +305,17 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 										</div>
 									</div>
 								</div>
-								<div class="tts-speed-controls">
-									<button class="tts-speed-btn" data-speed="0.5">0.5x</button>
-									<button class="tts-speed-btn active" data-speed="1">1x</button>
-									<button class="tts-speed-btn" data-speed="1.25">1.25x</button>
-									<button class="tts-speed-btn" data-speed="1.5">1.5x</button>
-									<button class="tts-speed-btn" data-speed="2">2x</button>
+								<div class="tts-controls-row">
+									<div class="tts-speed-controls">
+										<button class="tts-speed-btn" data-speed="0.5">0.5x</button>
+										<button class="tts-speed-btn active" data-speed="1">1x</button>
+										<button class="tts-speed-btn" data-speed="1.25">1.25x</button>
+										<button class="tts-speed-btn" data-speed="1.5">1.5x</button>
+										<button class="tts-speed-btn" data-speed="2">2x</button>
+									</div>
+									<select id="tts-voice-select" class="tts-voice-select" aria-label="Select voice">
+										<option value="">Loading voices...</option>
+									</select>
 								</div>
 							</div>
 						</div>
@@ -283,6 +333,8 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 	// Enhanced Text-to-Speech functionality
 	let speechSynthesis = window.speechSynthesis;
 	let currentUtterance: SpeechSynthesisUtterance | null = null;
+	let availableVoices: SpeechSynthesisVoice[] = [];
+	let selectedVoice: SpeechSynthesisVoice | null = null;
 	let isPlaying = false;
 	let currentRate = 1.0;
 	let words: string[] = [];
@@ -290,6 +342,124 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 	let startTime = 0;
 	let progressInterval: ReturnType<typeof setInterval> | null = null;
 	let totalElapsedTime = 0; // Track total elapsed time across speed changes
+
+	// Get the best available voice for speech synthesis
+	function getBestVoice(): SpeechSynthesisVoice | null {
+		availableVoices = speechSynthesis.getVoices();
+		
+		// Detect browser for specific optimizations
+		const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+		const isChrome = /chrome/i.test(navigator.userAgent);
+		
+		// Priority order for voice selection (best quality first)
+		let voicePreferences: RegExp[];
+		
+		if (isSafari) {
+			// Safari-specific voice preferences (better quality voices)
+			voicePreferences = [
+				/Samantha|Alex|Victoria|Daniel|Karen|Moira/i, // High-quality macOS voices
+				/enhanced|premium|natural/i,
+				/en-US.*female|en-GB.*female/i, // Female voices often clearer in Safari
+				/en-US|en-GB|en-AU/i,
+				/^en/i,
+				/default/i
+			];
+		} else {
+			// Chrome and other browsers
+			voicePreferences = [
+				/enhanced|neural|premium|natural|high.quality/i,
+				/Google.*female|Microsoft.*female/i, // High-quality female voices
+				/Google|Microsoft/i, // Generally better quality on other platforms
+				/female/i,
+				/en-US|en-GB|en-AU/i,
+				/^en/i,
+				/default/i
+			];
+		}
+
+		// Try each preference category
+		for (const preference of voicePreferences) {
+			const matchedVoice = availableVoices.find(voice => 
+				preference.test(voice.name) || preference.test(voice.lang)
+			);
+			if (matchedVoice) {
+				const isGoogleVoice = matchedVoice.name.toLowerCase().includes('google');
+				console.log(`Selected voice for ${isSafari ? 'Safari' : 'Browser'}:`, matchedVoice.name, '(' + matchedVoice.lang + ')');
+				if (isGoogleVoice) {
+					console.log('⚠️ Google voice detected - will use restart instead of pause/resume for better reliability');
+				}
+				return matchedVoice;
+			}
+		}
+
+		// Fallback to first available voice or null
+		const fallback = availableVoices.length > 0 ? availableVoices[0] : null;
+		if (fallback) {
+			console.log('Using fallback voice:', fallback.name, '(' + fallback.lang + ')');
+		}
+		return fallback;
+	}
+
+	// Populate voice selector with available voices
+	function populateVoiceSelector(voiceSelect: HTMLSelectElement) {
+		if (!voiceSelect) return;
+		
+		availableVoices = speechSynthesis.getVoices();
+		voiceSelect.innerHTML = '';
+		
+		// Add default option
+		const defaultOption = document.createElement('option');
+		defaultOption.value = '';
+		defaultOption.textContent = 'Default Voice';
+		voiceSelect.appendChild(defaultOption);
+		
+		// Filter and sort voices for better organization
+		const englishVoices = availableVoices.filter(voice => 
+			voice.lang.startsWith('en')
+		).sort((a, b) => {
+			// Prioritize enhanced/premium voices
+			const aIsEnhanced = /enhanced|neural|premium|natural/i.test(a.name);
+			const bIsEnhanced = /enhanced|neural|premium|natural/i.test(b.name);
+			
+			if (aIsEnhanced && !bIsEnhanced) return -1;
+			if (!aIsEnhanced && bIsEnhanced) return 1;
+			
+			return a.name.localeCompare(b.name);
+		});
+		
+		// Add English voices first
+		englishVoices.forEach(voice => {
+			const option = document.createElement('option');
+			option.value = voice.name;
+			const qualityTag = /enhanced|neural|premium|natural/i.test(voice.name) ? ' (HD)' : '';
+			option.textContent = `${voice.name}${qualityTag} (${voice.lang})`;
+			voiceSelect.appendChild(option);
+		});
+		
+		// Add other voices
+		const otherVoices = availableVoices.filter(voice => 
+			!voice.lang.startsWith('en')
+		).sort((a, b) => a.name.localeCompare(b.name));
+		
+		if (otherVoices.length > 0) {
+			const separator = document.createElement('option');
+			separator.disabled = true;
+			separator.textContent = '─── Other Languages ───';
+			voiceSelect.appendChild(separator);
+			
+			otherVoices.forEach(voice => {
+				const option = document.createElement('option');
+				option.value = voice.name;
+				option.textContent = `${voice.name} (${voice.lang})`;
+				voiceSelect.appendChild(option);
+			});
+		}
+		
+		// Select the best voice by default
+		if (selectedVoice) {
+			voiceSelect.value = selectedVoice.name;
+		}
+	}
 
 	function initTTS() {
 		const ttsButton = document.getElementById('tts-button');
@@ -303,6 +473,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 		const playerPlayIcon = document.getElementById('player-play-icon');
 		const playerPauseIcon = document.getElementById('player-pause-icon');
 		const speedButtons = document.querySelectorAll('.tts-speed-btn');
+		const voiceSelect = document.getElementById('tts-voice-select') as HTMLSelectElement;
 
 		if (!ttsButton || !player || !speechSynthesis) return;
 
@@ -310,6 +481,21 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 		if (!('speechSynthesis' in window)) {
 			ttsButton.style.display = 'none';
 			return;
+		}
+
+		// Initialize voice selection (voices may load asynchronously)
+		if (speechSynthesis.getVoices().length === 0) {
+			speechSynthesis.addEventListener('voiceschanged', () => {
+				selectedVoice = getBestVoice();
+				if (voiceSelect) {
+					populateVoiceSelector(voiceSelect);
+				}
+			});
+		} else {
+			selectedVoice = getBestVoice();
+			if (voiceSelect) {
+				populateVoiceSelector(voiceSelect);
+			}
 		}
 
 		// Update total time based on current speed
@@ -367,6 +553,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 			if (isPlaying) {
 				pauseSpeech();
 			} else {
+				// Always try to resume first, but with fallback to restart
 				resumeSpeech();
 			}
 		});
@@ -429,6 +616,46 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 			}
 		});
 
+		// Voice selection
+		if (voiceSelect) {
+			voiceSelect.addEventListener('change', function() {
+				const selectedVoiceName = voiceSelect.value;
+				if (selectedVoiceName) {
+					selectedVoice = availableVoices.find(voice => voice.name === selectedVoiceName) || null;
+				} else {
+					selectedVoice = getBestVoice(); // Reset to best voice
+				}
+				
+				// Log the voice change
+				if (selectedVoice) {
+					const isGoogleVoice = selectedVoice.name.toLowerCase().includes('google');
+					console.log('Voice changed to:', selectedVoice.name);
+					if (isGoogleVoice) {
+						console.log('⚠️ Google voice selected - will use restart method for pause/play');
+					}
+				}
+				
+				// If currently playing, restart with new voice
+				if (currentUtterance && isPlaying) {
+					const wasPlaying = isPlaying;
+					
+					// Add current session time to total elapsed time before restarting
+					const currentSessionTime = (Date.now() - startTime) / 1000;
+					totalElapsedTime += currentSessionTime;
+					
+					stopProgressTracking(); // Stop current tracking
+					speechSynthesis.cancel(); // Stop current speech
+					
+					if (wasPlaying) {
+						// Restart from current position with new voice
+						setTimeout(() => {
+							startSpeech();
+						}, 100);
+					}
+				}
+			});
+		}
+
 		function startSpeech() {
 			if (currentWordIndex >= words.length) {
 				currentWordIndex = 0;
@@ -438,9 +665,60 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 			if (!textToSpeak.trim()) return;
 
 			currentUtterance = new SpeechSynthesisUtterance(textToSpeak);
+			
+			// Apply enhanced voice settings for better quality
+			if (selectedVoice) {
+				currentUtterance.voice = selectedVoice;
+			}
+			
+			// Browser-specific optimizations
+			const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+			const isGoogleVoice = selectedVoice?.name.toLowerCase().includes('google') || false;
+			
+			// Optimized audio settings for better quality
 			currentUtterance.rate = currentRate;
-			currentUtterance.pitch = 1.0;
-			currentUtterance.volume = 1.0;
+			
+			if (isSafari) {
+				// Safari-specific optimizations
+				currentUtterance.pitch = 1.1; // Slightly higher pitch for Safari clarity
+				currentUtterance.volume = 0.9; // Slightly lower volume to reduce distortion
+			} else if (isGoogleVoice) {
+				// Google voices optimization (common in Chrome)
+				currentUtterance.pitch = 1.0;
+				currentUtterance.volume = 0.95; // Slightly lower to prevent clipping
+			} else {
+				// Chrome and other browsers
+				currentUtterance.pitch = 1.0; // Neutral pitch for natural sound
+				currentUtterance.volume = 1.0; // Full volume
+			}
+			
+			// Enhanced text preprocessing for better pronunciation
+			let processedText = textToSpeak
+				// Fix common pronunciation issues
+				.replace(/\b(\d+)\s*%/g, '$1 percent')
+				.replace(/\b(\d+)\s*\$/g, '$1 dollars')
+				.replace(/\b(\d+)\s*&/g, '$1 and')
+				.replace(/\b(vs\.?|v\.?)\b/gi, 'versus')
+				.replace(/\b(etc\.?)\b/gi, 'etcetera')
+				.replace(/\b(e\.g\.?)\b/gi, 'for example')
+				.replace(/\b(i\.e\.?)\b/gi, 'that is')
+				.replace(/\b(w\/)\b/gi, 'with')
+				.replace(/\b(w\/o)\b/gi, 'without')
+				// Add natural pauses after punctuation
+				.replace(/\./g, '. ')
+				.replace(/,/g, ', ')
+				.replace(/;/g, '; ')
+				.replace(/:/g, ': ')
+				.replace(/\?/g, '? ')
+				.replace(/!/g, '! ')
+				// Handle line breaks and paragraphs with longer pauses
+				.replace(/\n\s*\n/g, '. . ')
+				.replace(/\n/g, '. ')
+				// Clean up extra spaces
+				.replace(/\s+/g, ' ')
+				.trim();
+			
+			currentUtterance.text = processedText;
 
 			// Speech event handlers
 			currentUtterance.onstart = function() {
@@ -450,7 +728,22 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				startProgressTracking();
 			};
 
-
+			currentUtterance.onerror = function(event) {
+				console.log('Speech error:', event.error);
+				// Handle common Google voice errors
+				if (event.error === 'interrupted' || event.error === 'canceled') {
+					// These are normal when pausing/stopping
+					return;
+				}
+				
+				// For other errors, try to restart
+				if (isPlaying) {
+					setTimeout(() => {
+						console.log('Attempting to restart after error...');
+						startSpeech();
+					}, 500);
+				}
+			};
 
 			currentUtterance.onend = function() {
 				isPlaying = false;
@@ -477,7 +770,15 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 
 		function pauseSpeech() {
 			if (speechSynthesis.speaking) {
-				speechSynthesis.pause();
+				// Store the current time when pausing
+				if (isPlaying && startTime > 0) {
+					const currentSessionTime = (Date.now() - startTime) / 1000;
+					totalElapsedTime += currentSessionTime;
+				}
+				
+				// For Google voices, we'll always restart instead of pause/resume
+				// because they don't handle pause/resume reliably
+				speechSynthesis.cancel(); // Use cancel instead of pause for better reliability
 				isPlaying = false;
 				updatePlayerUI(false);
 				stopProgressTracking();
@@ -485,11 +786,42 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 		}
 
 		function resumeSpeech() {
-			if (speechSynthesis.paused) {
-				speechSynthesis.resume();
-				isPlaying = true;
-				updatePlayerUI(true);
-				startProgressTracking();
+			// Check if we have a Google voice
+			const isGoogleVoice = selectedVoice?.name.toLowerCase().includes('google') || false;
+			
+			if (isGoogleVoice) {
+				// Google voices: always restart, never try to resume
+				console.log('Google voice detected, restarting instead of resuming...');
+				startSpeech();
+				return;
+			}
+			
+			// For non-Google voices, try normal pause/resume
+			if (speechSynthesis.paused && currentUtterance) {
+				try {
+					speechSynthesis.resume();
+					
+					// Verify if resume worked
+					setTimeout(() => {
+						if (!speechSynthesis.speaking) {
+							// Resume failed, restart from current position
+							console.log('Resume failed, restarting speech...');
+							startSpeech();
+						} else {
+							// Resume successful
+							isPlaying = true;
+							updatePlayerUI(true);
+							startTime = Date.now(); // Reset start time for current session
+							startProgressTracking();
+						}
+					}, 100);
+				} catch (error) {
+					console.log('Resume error, restarting:', error);
+					startSpeech();
+				}
+			} else {
+				// Not paused or no utterance, restart from current position
+				startSpeech();
 			}
 		}
 
@@ -501,6 +833,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 			updatePlayerUI(false);
 			stopProgressTracking();
 			currentWordIndex = 0;
+			totalElapsedTime = 0;
 			updateProgress();
 		}
 
