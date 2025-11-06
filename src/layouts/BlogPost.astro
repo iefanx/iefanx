@@ -17,6 +17,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 			main {
 				width: calc(100% - 2em);
 				max-width: 100%;
+			
 				margin: 0;
 			}
 			.hero-image {
@@ -30,9 +31,9 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 			}
 			.prose {
 				width: 1080px;
-				max-width: calc(100% - 2em);
+				max-width: calc(100% - 1em);
 				margin: auto;
-				padding: 1em;
+				padding: 0.5em;
 				color: var(--text-primary);
 			}
 			.title {
@@ -89,7 +90,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				padding: 1em;
 				box-shadow: var(--box-shadow);
 				width: 1080px;
-				max-width: calc(100% - 2em);
+				max-width: calc(100% - 1em);
 				margin: 0 auto;
 				display: none;
 				transition: all 0.3s ease;
@@ -227,7 +228,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 			@media (max-width: 720px) {
 				.tts-player {
 					width: 100%;
-					max-width: calc(100% - 2em);
+					max-width: calc(100% - 1em);
 				}
 				.tts-controls-row {
 					gap: 8px;
