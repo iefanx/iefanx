@@ -296,10 +296,43 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				
 				/* TTS Player positioning fix for mobile */
 				.tts-player {
-					left: 50% !important;
-					transform: translateX(-50%) !important;
-					width: calc(100% - 2em) !important;
-					max-width: calc(100% - 2em) !important;
+					width: calc(100% - 1em) !important;
+					max-width: calc(100% - 1em) !important;
+					margin: 0 auto !important;
+					left: auto !important;
+					transform: none !important;
+					box-sizing: border-box;
+					padding: 0.8em !important;
+				}
+				
+				.tts-player-controls {
+					flex-wrap: wrap;
+					gap: 0.5em;
+				}
+				
+				.tts-progress-container {
+					width: 100%;
+					min-width: 150px;
+					order: 1; /* Force progress bar to top on mobile */
+					margin-bottom: 0.5em;
+				}
+				
+				.tts-player-controls {
+					flex-direction: column;
+					gap: 0.5em;
+					align-items: stretch;
+				}
+				
+				.tts-play-pause {
+					order: 2;
+					align-self: center;
+					margin-bottom: 0.5em;
+				}
+				
+				.tts-time {
+					order: 3;
+					text-align: center;
+					font-size: 0.8em;
 				}
 				
 				/* Additional mobile scaling for blog posts */
@@ -323,6 +356,42 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 			}
 			
 			/* Extra compact for very small screens */
+			@media (max-width: 480px) {
+				.tts-player {
+					width: calc(100% - 1em) !important;
+					padding: 0.5em !important;
+					margin: 0 0.5em !important;
+				}
+				
+				.tts-player-controls {
+					gap: 0.3em;
+				}
+				
+				.tts-play-pause {
+					width: 35px;
+					height: 35px;
+				}
+				
+				.tts-controls-row {
+					gap: 4px;
+					flex-wrap: wrap;
+					justify-content: center;
+				}
+				
+				.tts-speed-btn {
+					padding: 3px 6px;
+					font-size: 10px;
+				}
+				
+				.tts-voice-select {
+					width: 90px;
+					font-size: 9px;
+				}
+				
+				.tts-time {
+					font-size: 0.75em;
+				}
+			}
 			@media (max-width: 480px) {
 				article {
 					line-height: 1.4;
