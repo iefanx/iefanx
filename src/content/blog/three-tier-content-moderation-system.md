@@ -127,7 +127,6 @@ The ideal moderation architecture blends all three layers:
 
 1. **Layer 1: Blockhash filter** — Instantly detect known CSAM before further processing.
 2. **Layer 2: On-device ML model** — Analyze unseen or new content types locally and safely.
-3. **(Optional) Layer 3: API fallback** — For flagged borderline cases, allow a manual or opt-in remote verification flow if permitted by the user.
 
 This hybrid model ensures:
 - **Legal compliance** (via hash comparison)
