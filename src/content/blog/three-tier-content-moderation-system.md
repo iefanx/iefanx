@@ -1,5 +1,5 @@
 ---
-title: 'Rethinking Content Moderation: A Three-Tier System Balancing Privacy, Efficiency, and Intelligence'
+title: 'Rethinking Content Moderation: Balancing Privacy, Efficiency, and Intelligence'
 description: 'A comprehensive analysis of modern content moderation approaches - from blockhash-based systems to on-device ML models - and how to build privacy-preserving moderation that scales.'
 pubDate: 'Nov 10 2025'
 heroImage: '../../assets/blog-placeholder-3.jpg'
