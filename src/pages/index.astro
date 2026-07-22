@@ -1,115 +1,87 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import '../styles/home.css';
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
+	<head><BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} /></head>
 	<body>
-		<Header />
-		<main>
-			<h2>iefan.net</h2>
-			<p>Security Engineer | Software & Hardware Developer | Robotics & AI Enthusiast</p>
+		<div class="site-shell">
+			<Header />
+			<main id="top">
+				<aside class="field-rail" aria-label="Current focus">
+					<div>
+						<p class="eyebrow"><span class="status-dot" aria-hidden="true"></span>Available selectively</p>
+						<p class="availability">Independent builder working across software, hardware, and security.</p>
+					</div>
+					<ol class="margin-notes">
+						<li><strong>Security engineering</strong><span>Threat models that survive contact with reality.</span></li>
+						<li><strong>Embedded systems</strong><span>From boards and firmware to trusted execution.</span></li>
+						<li><strong>Sovereign protocols</strong><span>Bitcoin, Lightning, Nostr, and private payments.</span></li>
+					</ol>
+					<div class="rail-note"><p class="eyebrow">Notes from the workbench</p><p>Useful technology should return agency to the person using it.</p></div>
+				</aside>
 
-			<h3>Expertise</h3>
-			<ul>
-				<li><strong>Software:</strong> Full-stack development, high-performance systems, scalable web apps</li>
-				<li><strong>Embedded & Hardware:</strong> ESP32, RISC-V, PCB prototyping, low-power systems</li>
-				<li><strong>Cybersecurity:</strong> Zero-trust networks, cryptographic security, penetration testing</li>
-				<li><strong>Decentralized Tech:</strong> Bitcoin, Lightning Network, P2P architecture, censorship-resistant systems</li>
-				<li><strong>AI & Robotics:</strong> On-device inference, federated learning, autonomous drones, real-time processing</li>
-			</ul>
+				<div class="page-content">
+					<section class="hero" aria-labelledby="hero-title">
+						<div class="hero-copy">
+							<p class="kicker">Security engineer · software &amp; hardware developer</p>
+							<h1 id="hero-title">I build secure systems for a <em>sovereign internet.</em></h1>
+							<p class="intro">I work where <strong>atoms, protocols, and people</strong> meet—building resilient products across embedded systems, Bitcoin and Lightning, privacy, AI, and robotics.</p>
+							<p class="hand-note">useful technology, built to last</p>
+						</div>
+						<div class="profile-note">
+							<div class="profile-card">
+								<span class="card-label">Field note / 26</span><p class="profile-label">Current practice</p>
+								<h2>Engineer in the field,<br />systems thinker at heart.</h2>
+								<p>I turn ambiguous, high-stakes technical problems into products people can trust and understand.</p>
+								<div class="coordinates"><span>Remote / Worldwide</span><span>2026</span></div>
+							</div>
+							<blockquote>“Privacy and ownership should be product features—not configuration options.”<cite>Working principle No. 03</cite></blockquote>
+						</div>
+					</section>
 
-			<h3>Active Projects</h3>
-			
-			<h5>Hardware Security</h5>
-			<ul>
-				<li>Secure enclaves (ESP32, RISC-V) for cryptographic key storage</li>
-				<li>Custom tamper-resistant PCB design & firmware hardening</li>
-				<li>Encrypted bootloaders & trusted execution environments</li>
-			</ul>
+					<section class="selected-work" id="work" aria-labelledby="work-title">
+						<div class="section-heading"><div><p class="eyebrow">Selected investigations</p><h2 id="work-title">Work in progress</h2></div><p>Four active lines of inquiry</p></div>
+						<div class="project-list">
+							<article class="project"><span class="project-number">01</span><div><h3>Fanfares</h3><p>A value-first marketplace for encrypted digital culture, built on Nostr and peer-to-peer Bitcoin payments.</p></div><span class="project-tag">Nostr · Bitcoin</span></article>
+							<article class="project"><span class="project-number">02</span><div><h3>Secure enclaves</h3><p>Hardware-rooted trust for cryptographic secrets at the edge, from hardened firmware to tamper-aware boards.</p></div><span class="project-tag">Embedded · TEE</span></article>
+							<article class="project"><span class="project-number">03</span><div><h3>Zero-trust networking</h3><p>Identity-aware access, secure provisioning, and private communication without a privileged perimeter.</p></div><span class="project-tag">Privacy · Systems</span></article>
+							<article class="project"><span class="project-number">04</span><div><h3>On-device AI</h3><p>Private intelligence for low-power hardware, sensor fusion, navigation, and autonomous coordination.</p></div><span class="project-tag">AI · Robotics</span></article>
+						</div>
+					</section>
 
-			<h5>Zero-Trust Networking</h5>
-			<ul>
-				<li>End-to-end encrypted communication for IoT & embedded systems</li>
-				<li>Distributed identity solutions, secure over-the-air updates</li>
-				<li>Anonymous networking using Tor & mixnets</li>
-			</ul>
+					<section class="practice" id="practice" aria-labelledby="practice-title">
+						<div class="practice-intro"><p class="eyebrow">The working range</p><h2 id="practice-title">One practice, across the whole system.</h2><p>Good security does not live in a separate layer. It begins with product intent and continues through protocols, interfaces, hardware, and operations.</p></div>
+						<div class="capability-grid" aria-label="Areas of expertise">
+							<div><span>01</span><h3>Security architecture</h3><p>Threat modeling, cryptography, zero-trust networks, and secure provisioning.</p></div>
+							<div><span>02</span><h3>Embedded systems</h3><p>ESP32, RISC-V, firmware hardening, low-power systems, and PCB prototyping.</p></div>
+							<div><span>03</span><h3>Decentralized systems</h3><p>Bitcoin, Lightning, Nostr, Cashu, peer-to-peer architecture, and private payments.</p></div>
+							<div><span>04</span><h3>Applied intelligence</h3><p>On-device inference, robotics, sensor fusion, drones, and resilient coordination.</p></div>
+						</div>
+					</section>
 
-			<h5>Bitcoin & Decentralized Systems</h5>
-			<ul>
-				<li>Lightning Network-based micropayments, non-custodial wallets</li>
-				<li>Smart contracts on Bitcoin, multi-sig & multiscript implementations</li>
-				<li>Security audits for mining pools, privacy-focused transactions</li>
-			</ul>
+					<section class="principles" aria-labelledby="principles-title">
+						<p class="eyebrow">Operating principles</p><h2 id="principles-title">What the work should protect.</h2>
+						<div class="principle-list">
+							<article><span>I</span><h3>Agency</h3><p>Build for human choice and ownership—not extraction, lock-in, or dependence.</p></article>
+							<article><span>II</span><h3>Integrity</h3><p>Make security part of the architecture, not a checklist applied at the end.</p></article>
+							<article><span>III</span><h3>Durability</h3><p>Prefer comprehensible, resilient systems over impressive but brittle shortcuts.</p></article>
+							<article><span>IV</span><h3>Efficiency</h3><p>Use the minimum trust, energy, and complexity the problem genuinely requires.</p></article>
+						</div>
+					</section>
 
-			<h5>Robotics & AI</h5>
-			<ul>
-				<li>Programmable drones with real-time AI-driven navigation</li>
-				<li>Embedded AI for low-power inference & sensor fusion</li>
-				<li>Swarm intelligence & decentralized coordination algorithms</li>
-			</ul>
-
-			<h5>Privacy & Security</h5>
-			<ul>
-				<li>Local-first AI assistants with private inference</li>
-				<li>Secure provisioning pipelines for firmware deployment</li>
-				<li>Encrypted firmware execution, side-channel attack prevention</li>
-			</ul>
-
-			<h3>Tech Stack</h3>
-			<p>
-				Rust, C++, Python, Micropython, Terraform, WebGPU, React, Next.js, LVGL, ESP-IDF, Zephyr RTOS, ROS, Tor, Kubernetes, Docker, Lightning, IPFS, ZKP
-			</p>
-
-			<h3>Principles</h3>
-			<ul>
-				<li><strong>Minimal Trust:</strong> No reliance on centralized services, maximum transparency</li>
-				<li><strong>Sovereignty:</strong> Full user control over data, encryption by default</li>
-				<li><strong>Efficiency:</strong> Optimized for low-power hardware & edge computing</li>
-				<li><strong>Resilience:</strong> Systems designed for long-term durability & security</li>
-			</ul>
-		</main>
+					<section class="contact" id="contact" aria-labelledby="contact-title">
+						<div><p class="eyebrow">Have a hard problem?</p><h2 id="contact-title">Let’s make the complex feel inevitable.</h2></div>
+						<a class="contact-link" href="mailto:hello@iefan.net" data-testid="home-contact-email-link">Start a conversation <span aria-hidden="true">↗</span></a>
+					</section>
+				</div>
+			</main>
+			<Footer folio="portfolio / 001" />
+		</div>
 	</body>
 </html>
-
-<style>
-	h5 {
-		font-size: 1.1em;
-		margin: 1em 0 0.5em 0;
-		font-weight: 600;
-	}
-	
-	/* Mobile scaling for homepage */
-	@media (max-width: 720px) {
-		ul {
-			margin: 0.5em 0; /* Tighter list spacing */
-			padding-left: 1.2em; /* Smaller indent */
-		}
-		li {
-			margin-bottom: 0.5em; /* Compact list items */
-		}
-		h5 {
-			font-size: 1em; /* Smaller section headings */
-			margin: 0.8em 0 0.4em 0;
-		}
-	}
-	
-	@media (max-width: 480px) {
-		ul {
-			margin: 0.3em 0;
-			padding-left: 1em;
-		}
-		li {
-			margin-bottom: 0.3em;
-		}
-		h5 {
-			font-size: 0.95em;
-			margin: 0.6em 0 0.3em 0;
-		}
-	}
-</style>

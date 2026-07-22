@@ -3,6 +3,8 @@ title: 'Rethinking Content Moderation: Balancing Privacy, Efficiency, and Intell
 description: 'A comprehensive analysis of modern content moderation approaches - from blockhash-based systems to on-device ML models - and how to build privacy-preserving moderation that scales.'
 pubDate: 'Nov 10 2025'
 heroImage: '../../assets/blog-placeholder-3.jpg'
+topics: ['Privacy', 'On-Device AI', 'Content Moderation']
+featured: false
 ---
 
 Content moderation has evolved from simple pattern matching to advanced on-device intelligence. As digital platforms grow — from decentralized apps to encrypted media services — the need for smarter, privacy-preserving moderation becomes critical.
@@ -140,4 +142,3 @@ This hybrid model ensures:
 Content moderation shouldn't be about sacrificing privacy for safety — or vice versa. With lightweight, on-device AI models, platforms can finally offer intelligent moderation without sending user data to third-party services.
 
 This design not only reduces cost and complexity but also establishes trust through transparency — because moderation happens where it should: on the user's device, under their control.
-

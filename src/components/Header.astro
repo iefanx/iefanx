@@ -1,55 +1,17 @@
 ---
-import { SITE_TITLE } from '../consts';
-import HeaderLink from './HeaderLink.astro';
-import ThemeToggle from './ThemeToggle.astro';
+const isJournal = Astro.url.pathname.startsWith('/blog');
 ---
 
-<header>
-	<nav>
-		<h2><a href="/">{SITE_TITLE}</a></h2>
-		<div class="internal-links">
-			<HeaderLink href="/">Home</HeaderLink>
-			<HeaderLink href="/blog">Blog</HeaderLink>
-			<ThemeToggle />
-		</div>
+<header class="site-header">
+	<a class="brand" href="/#top" aria-label="Iefan, home" data-testid="site-header-brand-link">
+		<span class="brand-mark" aria-hidden="true">i.</span>
+		<span>iefan</span>
+	</a>
+	<p class="edition">Field notes on sovereign technology &amp; careful engineering</p>
+	<nav aria-label="Primary navigation">
+		<a href="/#work" data-testid="site-header-work-link">Work</a>
+		<a href="/blog" aria-current={isJournal ? 'page' : undefined} data-testid="site-header-blog-link">Journal</a>
+		<a href="/#practice" data-testid="site-header-practice-link">Practice</a>
+		<a href="/#contact" data-testid="site-header-contact-link">Contact</a>
 	</nav>
 </header>
-<style>
-	header {
-		margin: 0;
-		padding: 0 1em;
-		background: var(--header-bg);
-		box-shadow: 0 2px 8px var(--header-shadow);
-		transition: background-color 0.3s ease, box-shadow 0.3s ease;
-	}
-	h2 {
-		margin: 0;
-		font-size: 1em;
-	}
-
-	h2 a,
-	h2 a.active {
-		text-decoration: none;
-	}
-	nav {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-	nav a {
-		padding: 0.5em 0.5em;
-		color: var(--text-heading);
-		border-bottom: 4px solid transparent;
-		text-decoration: none;
-		transition: color 0.3s ease;
-	}
-	nav a.active {
-		text-decoration: none;
-		border-bottom-color: var(--accent);
-	}
-	.internal-links {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-	}
-</style>

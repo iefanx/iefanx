@@ -1,113 +1,65 @@
 ---
-import { Image } from 'astro:assets';
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
-import FormattedDate from '../../components/FormattedDate.astro';
+import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+import '../../styles/journal.css';
 
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+const posts = (await getCollection('blog')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const [leadPost, ...archivePosts] = posts;
+
+/** Formats a repository publication date using the journal's stable editorial treatment. */
+function formatDate(date: Date): string {
+	return new Intl.DateTimeFormat('en-US', { day: 'numeric', month: 'short', timeZone: 'UTC', year: 'numeric' }).format(date);
+}
+
+/** Estimates reading time from the Markdown body committed for a journal entry. */
+function readingMinutes(post: CollectionEntry<'blog'>): number {
+	const words = post.body.replace(/```[\s\S]*?```/g, ' ').trim().split(/\s+/).filter(Boolean).length;
+	return Math.max(1, Math.ceil(words / 220));
+}
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				max-width: calc(100% - 2em);
-			
-			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
-			}
-		</style>
-	</head>
+	<head><BaseHead title="The Workbench Review — Iefan" description="Long-form field notes on security architecture, sovereign systems, embedded hardware, privacy, and applied intelligence." /></head>
 	<body>
-		<Header />
-		<main>
-			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>
-									{post.data.heroImage && (
-										<Image width={720} height={360} src={post.data.heroImage} alt="" />
-									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</section>
-		</main>
+		<div class="site-shell blog-shell">
+			<Header />
+			<main class="journal-main" id="top">
+				<section class="journal-masthead" aria-labelledby="journal-title">
+					<div class="journal-mark" aria-hidden="true"><span>WR</span><small>Est. 2025</small></div>
+					<div><p class="eyebrow">The Workbench Review · Vol. 01</p><h1 id="journal-title">Research notes for systems that respect their users.</h1></div>
+					<p class="journal-deck">Long-form investigations into cryptographic infrastructure, local intelligence, embedded trust, and the protocols behind a more sovereign internet.</p>
+				</section>
+
+				<section class="lead-story" aria-labelledby="lead-story-title">
+					<div class="lead-story-ledger"><p class="eyebrow">Lead dispatch</p><span class="lead-number">001</span><div><time datetime={leadPost.data.pubDate.toISOString()}>{formatDate(leadPost.data.pubDate)}</time><span>{readingMinutes(leadPost)} min read</span></div></div>
+					<article>
+						<p class="topic-line">{leadPost.data.topics.join(' · ')}</p>
+						<h2 id="lead-story-title"><a href={`/blog/${leadPost.id}/`} data-testid="blog-lead-story-link">{leadPost.data.title}</a></h2>
+						<p>{leadPost.data.description}</p>
+						<a class="read-link" href={`/blog/${leadPost.id}/`} data-testid="blog-lead-read-link">Read the field note <span aria-hidden="true">↗</span></a>
+					</article>
+				</section>
+
+				<section class="journal-archive" aria-labelledby="archive-title">
+					<div class="archive-intro"><p class="eyebrow">From the archive</p><h2 id="archive-title">Earlier investigations</h2><p>Each note begins with a concrete systems problem and follows the tradeoffs all the way down.</p><a href="/rss.xml" class="rss-link" data-testid="blog-rss-link">Follow via RSS ↗</a></div>
+					<div class="archive-grid">
+						{archivePosts.map((post, index) => (
+							<article class="archive-card">
+								<div class="archive-card-meta"><span>{String(index + 2).padStart(2, '0')}</span><time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time></div>
+								<h3><a href={`/blog/${post.id}/`} data-testid={`blog-archive-${post.id}-link`}>{post.data.title}</a></h3>
+								<p>{post.data.description}</p>
+								<div class="article-topics"><span>{post.data.topics.join(' · ')}</span><span>{readingMinutes(post)} min read</span></div>
+							</article>
+						))}
+					</div>
+				</section>
+
+				<section class="editorial-note" aria-label="Editorial approach"><p class="eyebrow">Editorial compass</p><blockquote>“The useful technical essay leaves the reader with a model they can carry into the next hard problem.”</blockquote><p>Written from implementation work, published from the repository, and kept deliberately independent of an attention-driven platform.</p></section>
+			</main>
+			<Footer folio="journal / 001" />
+		</div>
 	</body>
 </html>

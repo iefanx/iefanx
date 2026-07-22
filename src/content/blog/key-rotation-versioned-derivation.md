@@ -3,6 +3,8 @@ title: 'Time-Based Keyset Selection: Achieving Safe Key Rotation'
 description: 'Discover how we implemented a versioned key derivation system that allows for seamless key rotation across client and server without breaking historical content.'
 pubDate: 'Apr 23 2026'
 heroImage: '../../assets/key-rotation-hero.png'
+topics: ['Cryptography', 'Key Rotation', 'Distributed Systems']
+featured: true
 ---
 
 Decryption in a distributed system is often a balancing act between security and availability. For a long time, the simplest approach was to use the "latest key" to decrypt content. However, as systems scale and security requirements evolve, rotating those keys becomes a necessity. 

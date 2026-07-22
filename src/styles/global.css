@@ -1,325 +1,68 @@
-/*
-  The CSS in this style tag is based off of Bear Blog's default CSS.
-  https://github.com/HermanMartinus/bearblog/blob/297026a877bc2ab2b3bdfbd6b9f7961c350917dd/templates/styles/blog/default.css
-  License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
- */
-
 :root {
-	--accent: #2337ff;
-	--accent-dark: #000d8a;
-	--black: 15, 18, 25;
-	--gray: 96, 115, 159;
-	--gray-light: 229, 233, 240;
-	--gray-dark: 34, 41, 57;
-	--gray-gradient: rgba(var(--gray-light), 50%), #fff;
-	--box-shadow:
-		0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%), 0 16px 32px rgba(var(--gray), 33%);
+	--paper: #f1eadc;
+	--paper-light: #f8f3e9;
+	--ink: #18211d;
+	--body: #39423d;
+	--muted: #706b5f;
+	--rust: #c84e2e;
+	--rust-dark: #8f321d;
+	--moss: #475b49;
+	--rule: #bbb19f;
+	--serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+	--sans: 'DM Sans', Inter, system-ui, sans-serif;
 }
 
-/* Light theme (default) */
-:root {
-	--bg-primary: #ffffff;
-	--bg-secondary: rgba(var(--gray-light), 50%);
-	--text-primary: rgb(var(--gray-dark));
-	--text-secondary: rgb(var(--gray));
-	--text-heading: rgb(var(--black));
-	--border-color: rgb(var(--gray-light));
-	--code-bg: rgb(var(--gray-light));
-	--header-bg: #ffffff;
-	--header-shadow: rgba(var(--black), 5%);
-}
-
-/* Dark theme */
-[data-theme="dark"] {
-	--accent: #4f8fff;
-	--accent-dark: #2563eb;
-	--black: 255, 255, 255;
-	--gray: 163, 163, 163;
-	--gray-light: 55, 65, 81;
-	--gray-dark: 209, 213, 219;
-	--gray-gradient: rgba(0, 0, 0, 50%), #000;
-	--box-shadow:
-		0 2px 6px rgba(0, 0, 0, 25%), 0 8px 24px rgba(0, 0, 0, 33%), 0 16px 32px rgba(0, 0, 0, 33%);
-
-	--bg-primary: #000000;
-	--bg-secondary: rgba(255, 255, 255, 10%);
-	--text-primary: rgb(var(--gray-dark));
-	--text-secondary: rgb(var(--gray));
-	--text-heading: rgb(var(--black));
-	--border-color: rgb(var(--gray-light));
-	--code-bg: rgb(var(--gray-light));
-	--header-bg: #000000;
-	--header-shadow: rgba(0, 0, 0, 25%);
-}
-
-html {
-	background-color: var(--bg-primary);
-}
-
-@font-face {
-	font-family: "Atkinson";
-	src: url("/fonts/atkinson-regular.woff") format("woff");
-	font-weight: 400;
-	font-style: normal;
-	font-display: swap;
-}
-
-@font-face {
-	font-family: "Atkinson";
-	src: url("/fonts/atkinson-bold.woff") format("woff");
-	font-weight: 700;
-	font-style: normal;
-	font-display: swap;
-}
-
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; background: var(--paper); }
 body {
-	font-family: "Atkinson", sans-serif;
 	margin: 0;
+	color: var(--ink);
+	background: radial-gradient(circle at 82% 7%, rgb(200 78 46 / 8%), transparent 24rem), radial-gradient(circle at 6% 74%, rgb(71 91 73 / 7%), transparent 25rem), repeating-linear-gradient(0deg, rgb(24 33 29 / 1.8%) 0, rgb(24 33 29 / 1.8%) 1px, transparent 1px, transparent 5px), var(--paper);
+	font-family: var(--sans);
+	-webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--rust-dark); outline-offset: 5px; }
 
-	padding: 0;
-	text-align: left;
-	background: linear-gradient(var(--gray-gradient)) no-repeat;
-	background-size: 100% 600px;
-	background-color: var(--bg-primary);
-	word-wrap: break-word;
-	overflow-wrap: break-word;
-	color: var(--text-primary);
-	font-size: 20px;
-	line-height: 1.7;
-	transition: background-color 0.3s ease, color 0.3s ease;
+.site-shell { width: min(100% - 56px, 1480px); margin: 0 auto; position: relative; }
+.site-shell::before { content: ''; position: absolute; inset: 18px -18px; border: 1px solid rgb(24 33 29 / 21%); pointer-events: none; }
+.site-header { min-height: 96px; display: grid; grid-template-columns: 250px 1fr auto; align-items: center; gap: 28px; border-bottom: 1px solid var(--ink); position: relative; z-index: 1; }
+.brand { min-height: 44px; display: inline-flex; align-items: center; gap: 12px; width: fit-content; font-size: 17px; font-weight: 700; letter-spacing: -.03em; }
+.brand-mark { width: 31px; height: 31px; display: grid; place-items: center; border-radius: 50%; color: var(--paper-light); background: var(--ink); font: italic 20px/1 var(--serif); }
+.edition { margin: 0; color: var(--muted); font: italic 16px/1.4 var(--serif); }
+nav { display: flex; gap: 30px; }
+nav a { min-width: 44px; min-height: 44px; position: relative; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; letter-spacing: .11em; text-transform: uppercase; }
+nav a::after { content: ''; position: absolute; left: 0; right: 100%; bottom: 3px; height: 2px; background: var(--rust); transition: right 220ms ease; }
+nav a:hover::after, nav a[aria-current='page']::after { right: 0; }
+
+.eyebrow { margin: 0; color: var(--rust-dark); font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+.topic-line { margin: 0; color: var(--rust-dark); font-size: 10px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+footer { min-height: 100px; display: flex; align-items: center; justify-content: space-between; gap: 30px; color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+
+@media (max-width: 1050px) {
+	.site-shell { width: min(100% - 36px, 900px); }
+	.site-shell::before { inset-inline: -10px; }
+	.site-header { grid-template-columns: 1fr auto; }
+	.edition { display: none; }
 }
 
-main {
-	width: 720px;
-	max-width: calc(100% - 2em);
-	margin: auto;
-	padding: 3em 1em;
-	justify-self: center;
-
+@media (max-width: 700px) {
+	.site-shell { width: min(100% - 28px, 620px); }
+	.site-shell::before { display: none; }
+	.site-header { min-height: 82px; gap: 18px; }
+	nav { gap: 14px; }
+	nav a { font-size: 10px; }
+	footer { align-items: flex-start; flex-direction: column; justify-content: center; }
+	footer a { min-height: 44px; display: inline-flex; align-items: center; }
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	margin: 0 0 0.5rem 0;
-	color: var(--text-heading);
-	line-height: 1.2;
+@media (max-width: 560px) {
+	.site-header { grid-template-columns: 1fr; gap: 8px; padding: 14px 0 10px; }
+	nav { width: 100%; justify-content: space-between; gap: 4px; }
+	nav a { font-size: 10px; }
 }
 
-h1 {
-	font-size: 3.052em;
-}
-
-h2 {
-	font-size: 2.441em;
-}
-
-h3 {
-	font-size: 1.953em;
-}
-
-h4 {
-	font-size: 1.563em;
-}
-
-h5 {
-	font-size: 1.25em;
-}
-
-strong,
-b {
-	font-weight: 700;
-}
-
-a {
-	color: var(--accent);
-}
-
-a:hover {
-	color: var(--accent);
-}
-
-p {
-	margin-bottom: 1em;
-}
-
-.prose p {
-	margin-bottom: 2em;
-}
-
-textarea {
-	width: 100%;
-	font-size: 16px;
-}
-
-input {
-	font-size: 16px;
-}
-
-table {
-	width: 100%;
-}
-
-img {
-	max-width: 100%;
-	height: auto;
-	border-radius: 8px;
-}
-
-code {
-	padding: 2px 5px;
-	background-color: var(--code-bg);
-	border-radius: 2px;
-}
-
-pre {
-	padding: 1.5em;
-	border-radius: 8px;
-	background-color: var(--code-bg);
-}
-
-pre>code {
-	all: unset;
-}
-
-blockquote {
-	border-left: 4px solid var(--accent);
-	padding: 0 0 0 20px;
-	margin: 0px;
-	font-size: 1.333em;
-}
-
-hr {
-	border: none;
-	border-top: 1px solid var(--border-color);
-}
-
-@media (max-width: 720px) {
-	body {
-		font-size: 16px;
-		/* Smaller font for more content */
-	}
-
-	main {
-		padding: 0.75em;
-		/* Tighter padding */
-		max-width: calc(100% - 1em);
-		/* More width usage */
-
-	}
-
-	h1 {
-		font-size: 2.2em;
-		/* Scale down headings */
-	}
-
-	h2 {
-		font-size: 1.8em;
-	}
-
-	h3 {
-		font-size: 1.5em;
-	}
-
-	h4 {
-		font-size: 1.3em;
-	}
-
-	h5 {
-		font-size: 1.1em;
-	}
-
-	p {
-		margin-bottom: 0.8em;
-		/* Tighter paragraph spacing */
-		line-height: 1.5;
-		/* More compact line height */
-	}
-
-	.prose p {
-		margin-bottom: 1.5em;
-		/* Scale down prose spacing */
-	}
-
-	blockquote {
-		font-size: 1.1em;
-		/* Smaller blockquotes */
-		padding: 0 0 0 15px;
-		/* Tighter padding */
-	}
-
-	pre {
-		padding: 1em;
-		/* Smaller code block padding */
-		font-size: 0.9em;
-		/* Smaller code font */
-	}
-}
-
-/* Extra small screens - even more compact */
-@media (max-width: 480px) {
-	body {
-		font-size: 15px;
-		/* Even smaller font */
-		line-height: 1.5;
-		/* More compact line height */
-	}
-
-	main {
-		padding: 0.5em;
-		/* Minimal padding */
-		max-width: calc(100% - 1em);
-		/* Maximum width usage */
-	}
-
-	h1 {
-		font-size: 1.9em;
-		/* Further scale down headings */
-	}
-
-	h2 {
-		font-size: 1.6em;
-	}
-
-	h3 {
-		font-size: 1.3em;
-	}
-
-	h4 {
-		font-size: 1.2em;
-	}
-
-	h5 {
-		font-size: 1.05em;
-	}
-
-	p {
-		margin-bottom: 0.7em;
-		/* Very tight spacing */
-	}
-
-	.prose p {
-		margin-bottom: 1.2em;
-	}
-}
-
-.sr-only {
-	border: 0;
-	padding: 0;
-	margin: 0;
-	position: absolute !important;
-	height: 1px;
-	width: 1px;
-	overflow: hidden;
-	/* IE6, IE7 - a 0 height clip, off to the bottom right of the visible 1px box */
-	clip: rect(1px 1px 1px 1px);
-	/* maybe deprecated but we need to support legacy browsers */
-	clip: rect(1px, 1px, 1px, 1px);
-	/* modern browsers, clip-path works inwards from each corner */
-	clip-path: inset(50%);
-	/* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
-	white-space: nowrap;
+@media (prefers-reduced-motion: reduce) {
+	html { scroll-behavior: auto; }
+	*, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
 }
