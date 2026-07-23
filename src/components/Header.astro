@@ -9,7 +9,7 @@ const isJournal = Astro.url.pathname.startsWith('/blog');
 	</a>
 	<p class="edition">Field notes on sovereign technology &amp; careful engineering</p>
 	<nav aria-label="Primary navigation">
-		<a href="/#work" data-testid="site-header-work-link">Work</a>
+		<a href="/" aria-current={!isJournal ? 'page' : undefined} data-testid="site-header-home-link">Home</a>
 		<a href="/blog" aria-current={isJournal ? 'page' : undefined} data-testid="site-header-blog-link">Journal</a>
 		<a href="/#practice" data-testid="site-header-practice-link">Practice</a>
 		<a href="/#contact" data-testid="site-header-contact-link">Contact</a>
