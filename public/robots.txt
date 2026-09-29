@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://iefan.net/sitemap-index.xml

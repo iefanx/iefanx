@@ -7,5 +7,6 @@ import { defineConfig } from 'astro/config';
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://iefan.net',
-	integrations: [mdx(), sitemap()],
+	devToolbar: { enabled: false },
+	integrations: [mdx(), sitemap({ filter: (page) => !page.endsWith('/404/') && !page.endsWith('/about/') })],
 });

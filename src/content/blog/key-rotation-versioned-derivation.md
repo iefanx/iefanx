@@ -1,7 +1,7 @@
 ---
 title: 'Time-Based Keyset Selection: Achieving Safe Key Rotation'
 description: 'Discover how we implemented a versioned key derivation system that allows for seamless key rotation across client and server without breaking historical content.'
-pubDate: 'Apr 23 2026'
+pubDate: '2026-04-23'
 heroImage: '../../assets/key-rotation-hero.png'
 topics: ['Cryptography', 'Key Rotation', 'Distributed Systems']
 featured: true

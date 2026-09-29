@@ -3,61 +3,94 @@ import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import { projects } from '../data/projects';
+import AudioReader from '../components/AudioReader.astro';
 import '../styles/journal.css';
-
-interface Heading {
-	depth: number;
-	slug: string;
-	text: string;
-}
-
+interface Heading { depth: number; slug: string; text: string; }
 interface Props extends CollectionEntry<'blog'>['data'] {
-	postId: string;
-	headings: Heading[];
-	relatedPosts: CollectionEntry<'blog'>[];
-	readingMinutes: number;
+  postId: string;
+  headings: Heading[];
+  relatedPosts: CollectionEntry<'blog'>[];
+  readingMinutes: number;
 }
-
-const { title, description, pubDate, updatedDate, heroImage, topics, postId, headings, relatedPosts, readingMinutes } = Astro.props;
-const ledgerHeadings = headings.filter((heading) => heading.depth === 2);
-
-/** Formats committed publication dates consistently across article metadata and related reading. */
-function formatDate(date: Date): string {
-	return new Intl.DateTimeFormat('en-US', { day: 'numeric', month: 'short', timeZone: 'UTC', year: 'numeric' }).format(date);
-}
-
-/** Estimates a related post's reading time from its committed Markdown body. */
-function relatedReadingMinutes(post: CollectionEntry<'blog'>): number {
-	return Math.max(1, Math.ceil(post.body.trim().split(/\s+/).filter(Boolean).length / 220));
-}
+const { title, description, pubDate, updatedDate, heroImage, topics, headings, relatedPosts, readingMinutes, kind, status, researchQuestion, method, evaluation, project, postId } = Astro.props;
+const research = kind === 'research';
+const relatedProject = projects.find(p => p.id === project);
+const date = (d: Date) => new Intl.DateTimeFormat('en', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(d);
 ---
-
 <!doctype html>
 <html lang="en">
-	<head><BaseHead title={`${title} — Iefan`} description={description} image={heroImage} type="article" /></head>
-	<body>
-		<div class="site-shell article-shell">
-			<Header />
-			<main class="article-main" id="top">
-				<a class="back-to-journal" href="/blog" data-testid="article-back-link">← The Workbench Review</a>
-				<header class="article-masthead">
-					<div class="article-issue"><span>Field note</span><strong>{pubDate.getUTCFullYear()} / {postId.slice(0, 2).toUpperCase()}</strong></div>
-					<div><p class="topic-line">{topics.join(' · ')}</p><h1>{title}</h1><p class="article-description">{description}</p></div>
-					<div class="article-byline"><span>Written by Iefan</span><time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>{updatedDate && <span>Updated {formatDate(updatedDate)}</span>}<span>{readingMinutes} min read</span></div>
-				</header>
-
-				<div class="article-layout">
-					<aside class="reading-ledger" aria-label="Article sections"><p class="eyebrow">Reading ledger</p><ol>{ledgerHeadings.map((heading, index) => <li><span>{String(index + 1).padStart(2, '0')}</span><a href={`#${heading.slug}`}>{heading.text}</a></li>)}</ol><a href="/rss.xml">RSS feed ↗</a></aside>
-					<article class="prose"><slot /></article>
-					<aside class="article-margin-note"><span aria-hidden="true">i.</span><p>Implementation notes from the workbench—written to make the underlying system easier to reason about.</p></aside>
-				</div>
-
-				<section class="related-reading" aria-labelledby="related-title">
-					<div><p class="eyebrow">Continue reading</p><h2 id="related-title">More from the archive</h2></div>
-					<div>{relatedPosts.map((post) => <article><time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time><h3><a href={`/blog/${post.id}/`}>{post.data.title}</a></h3><span>{relatedReadingMinutes(post)} min read ↗</span></article>)}</div>
-				</section>
-			</main>
-			<Footer folio={`journal / ${pubDate.toISOString().slice(0, 10).replaceAll('-', '.')}`} />
-		</div>
-	</body>
+  <head><BaseHead title={`${title} — Iefan`} description={description} image={heroImage} type="article"/>
+    <meta property="article:published_time" content={pubDate.toISOString()}/>
+    {updatedDate && <meta property="article:modified_time" content={updatedDate.toISOString()}/>}
+    <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@type': 'BlogPosting', headline: title, description, datePublished: pubDate.toISOString(), dateModified: (updatedDate ?? pubDate).toISOString(), author: { '@type': 'Person', name: 'Iefan', url: new URL('/', Astro.site).href }, mainEntityOfPage: new URL(`/blog/${postId}/`, Astro.site).href }).replace(/</g, '\\u003c')}/>
+  </head>
+  <body>
+    <div class="reading-progress" aria-hidden="true"></div>
+    <div class="site-shell">
+      <Header section={research ? 'research' : 'journal'}/>
+      <main class="article-main" id="top">
+        <a class="back-to-journal" href={research ? '/research/' : '/blog/'}>← {research ? 'All research' : 'All stories'}</a>
+        <header class="article-masthead">
+          <p class="topic-line">{topics.join(' / ')}</p>
+          <h1>{title}</h1>
+          <p class="article-description">{description}</p>
+          <div class="article-byline"><span>By Iefan</span><time datetime={pubDate.toISOString()}>{date(pubDate)}</time><span>{readingMinutes} min read</span><span class="publication-status">{status}</span>{updatedDate && <span>Updated {date(updatedDate)}</span>}</div>
+          {research && <div class="draft-notice">Working paper · A draft research proposal, open for discussion. Not peer reviewed or experimentally validated.</div>}
+          {research && <dl class="paper-brief"><div><dt>Research question</dt><dd>{researchQuestion}</dd></div><div><dt>Proposed approach</dt><dd>{method}</dd></div><div><dt>Evaluation plan</dt><dd>{evaluation}</dd></div></dl>}
+          {relatedProject && <div class="project-backlink"><span>From the workbench</span><a href={`/work/#${relatedProject.id}`}>{relatedProject.name} — project overview ↗</a></div>}
+          <div class="article-tools"><AudioReader target="article.prose"/><button class="print-button" type="button">Print / Save as PDF ↗</button></div>
+        </header>
+        <div class="article-layout">
+          <aside class="reading-ledger" aria-label="Article sections">
+            <details class="article-contents"><summary>In this {research ? 'paper' : status === 'Essay' ? 'essay' : 'article'} <span aria-hidden="true">↓</span></summary><ol>{headings.filter(h => h.depth === 2).map(h => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol></details>
+            <a class="text-link" href="/rss.xml">Follow via RSS ↗</a>
+          </aside>
+          <article class="prose"><slot/></article>
+        </div>
+        <section class="related-reading"><p class="eyebrow">Keep exploring</p><h2>Another line of inquiry.</h2><div>{relatedPosts.map(p => <a href={`/blog/${p.id}/`}><span>{p.data.status}</span><h3>{p.data.title}</h3><span>Read more ↗</span></a>)}</div></section>
+      </main>
+      <Footer folio="article"/>
+    </div>
+  </body>
 </html>
+<script>
+  document.querySelector('.print-button')?.addEventListener('click', () => window.print());
+  const contents = document.querySelector<HTMLDetailsElement>('.article-contents');
+  const desktop = window.matchMedia('(min-width: 801px)');
+  if (contents) {
+    const setContents = () => { contents.open = desktop.matches; };
+    setContents();
+    desktop.addEventListener('change', setContents);
+  }
+</script>
+
+<script>
+  const prose = document.querySelector<HTMLElement>('.prose');
+  const progress = document.querySelector<HTMLElement>('.reading-progress');
+  const sectionLinks = [...document.querySelectorAll<HTMLAnchorElement>('.article-contents a')];
+  const sections = sectionLinks.map(link => document.getElementById(decodeURIComponent(link.hash.slice(1)))).filter((section): section is HTMLElement => Boolean(section));
+  let pending = false;
+  function updateReadingPosition() {
+    pending = false;
+    if (!prose || !progress) return;
+    const bounds = prose.getBoundingClientRect();
+    const distance = Math.max(1, bounds.height - window.innerHeight);
+    progress.style.transform = `scaleX(${Math.max(0, Math.min(1, -bounds.top / distance))})`;
+    let current = '';
+    for (const section of sections) {
+      if (section.getBoundingClientRect().top <= window.innerHeight * .3) current = section.id;
+    }
+    sectionLinks.forEach(link => {
+      if (decodeURIComponent(link.hash.slice(1)) === current) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    });
+  }
+  function scheduleUpdate() {
+    if (!pending) { pending = true; requestAnimationFrame(updateReadingPosition); }
+  }
+  window.addEventListener('scroll', scheduleUpdate, { passive: true });
+  window.addEventListener('resize', scheduleUpdate);
+  document.fonts.ready.then(scheduleUpdate);
+  updateReadingPosition();
+</script>

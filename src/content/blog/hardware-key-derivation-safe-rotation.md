@@ -1,7 +1,7 @@
 ---
 title: 'Hardware-Based Key Derivation and Safe Rotation Without Re-Encrypting Content'
 description: 'Learn how to use hardware devices as immutable root-of-trust for secure key derivation and implement safe key rotation without breaking past events or re-encrypting content.'
-pubDate: 'Nov 07 2025'
+pubDate: '2025-11-07'
 heroImage: '../../assets/blog-placeholder-4.jpg'
 topics: ['Hardware Security', 'Cryptography', 'Key Management']
 featured: false
