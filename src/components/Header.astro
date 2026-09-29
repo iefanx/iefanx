@@ -1,25 +1,17 @@
 ---
-interface Props { section?: 'research' | 'journal' | 'work'; }
-const path = Astro.url.pathname;
-const about = path === '/' || path === '/about/';
-const research = Astro.props.section === 'research' || path.startsWith('/research');
-const work = path.startsWith('/work');
-const journal = !research && (Astro.props.section === 'journal' || path.startsWith('/blog'));
+const isJournal = Astro.url.pathname.startsWith('/blog');
 ---
-<a class="skip-link" href="#top">Skip to content</a>
+
 <header class="site-header">
-  <div class="masthead-row">
-    <a class="brand" href="/" aria-label="Iefan, home" data-testid="site-header-brand-link">Iefan<span aria-hidden="true">.</span></a>
-    <p class="masthead-description">An independent publication on<br />technology, trust, and human agency.</p>
-    <a class="header-email" href="mailto:iefan.work@gmail.com">Say hello <span aria-hidden="true">↗</span></a>
-  </div>
-  <div class="navigation-row">
-    <nav aria-label="Primary navigation">
-      <a href="/" aria-current={about ? 'page' : undefined}>About me</a>
-      <a href="/research/" aria-current={research ? 'page' : undefined}>Research</a>
-      <a href="/blog/" aria-current={journal ? 'page' : undefined}>Journal</a>
-      <a href="/work/" aria-current={work ? 'page' : undefined}>The workbench</a>
-    </nav>
-    <span class="edition-label">Independent thought. Open inquiry.</span>
-  </div>
+	<a class="brand" href="/#top" aria-label="Iefan, home" data-testid="site-header-brand-link">
+		<span class="brand-mark" aria-hidden="true">i.</span>
+		<span>iefan</span>
+	</a>
+	<p class="edition">Field notes on sovereign technology &amp; careful engineering</p>
+	<nav aria-label="Primary navigation">
+		<a href="/" aria-current={Astro.url.pathname === '/' ? 'page' : undefined} data-testid="site-header-home-link">Home</a>
+		<a href="/blog" aria-current={isJournal ? 'page' : undefined} data-testid="site-header-blog-link">Journal</a>
+		<a href="/#practice" data-testid="site-header-practice-link">Practice</a>
+		<a href="/#contact" data-testid="site-header-contact-link">Contact</a>
+	</nav>
 </header>

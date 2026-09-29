@@ -1,77 +1,65 @@
 ---
-import { getCollection } from 'astro:content';
-import BaseHead from './BaseHead.astro';
-import Header from './Header.astro';
-import Footer from './Footer.astro';
-import { projects } from '../data/projects';
-import { readingMinutes as minutes } from '../utils/publication';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
 import '../styles/journal.css';
-interface Props { research?: boolean; }
-const { research = false } = Astro.props;
-const posts = (await getCollection('blog')).filter(p => research ? p.data.kind === 'research' : p.data.kind === 'note').sort((a,b) => b.data.pubDate.valueOf()-a.data.pubDate.valueOf() || b.id.localeCompare(a.id));
-const categories = [...new Set(posts.map(p => p.data.topics[0]))];
-const date = (d: Date) => new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' }).format(d);
+
+const posts = (await getCollection('blog')).filter(post => post.data.kind === 'research').sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf() || b.id.localeCompare(a.id));
+const [leadPost, ...archivePosts] = posts;
+
+/** Formats a repository publication date using the journal's stable editorial treatment. */
+function formatDate(date: Date): string {
+	return new Intl.DateTimeFormat('en-US', { day: 'numeric', month: 'short', timeZone: 'UTC', year: 'numeric' }).format(date);
+}
+
+/** Estimates reading time from the Markdown body committed for a journal entry. */
+function readingMinutes(post: CollectionEntry<'blog'>): number {
+	const words = post.body.replace(/```[\s\S]*?```/g, ' ').trim().split(/\s+/).filter(Boolean).length;
+	return Math.max(1, Math.ceil(words / 220));
+}
 ---
+
 <!doctype html>
 <html lang="en">
-  <head><BaseHead title={`${research ? 'Research' : 'Journal'} — Iefan`} description={research ? 'Working papers with research questions, methods, and evaluation plans for secure systems and document narration.' : 'Project case studies, engineering notes, and essays from the workbench.'}/></head>
-  <body><div class="site-shell"><Header/><main id="top" class:list={['publication-main', research ? 'research-index' : 'journal-index']}>
-    <section class="publication-hero">
-      <p class="eyebrow">{research ? 'The research desk / Working papers' : 'The journal / From the workbench'}</p>
-      <h1>{research ? 'Questions to put to the test.' : 'Stories from the systems I build.'}</h1>
-      <p>{research ? 'Each paper starts with an open question, proposes a method, and defines what evidence would move the idea forward.' : 'Inside the projects: the decisions, constraints, and small details that shape the experience.'}</p>
-      <div class="publication-note"><span class="status-dot"></span>{research ? 'Working proposals · Methods and evaluation plans · Not yet peer reviewed or experimentally validated' : 'Project case studies · Practical engineering notes · Personal essays'}</div>
-    </section>
-    <section aria-label="Publication collection">
-      <div class="collection-toolbar"><div class="filters" role="group" aria-label="Filter by topic"><button type="button" data-filter="all" aria-pressed="true">All {research ? 'papers' : 'stories'} <span>{posts.length}</span></button>{categories.map(c => <button type="button" data-filter={c} aria-pressed="false">{c}</button>)}</div><label class="search-label"><span class="sr-only">Search publications</span><span aria-hidden="true">⌕</span><input type="search" placeholder={research ? 'Search research…' : 'Search stories…'} id="publication-search"/></label></div>
-      <div class:list={['publication-list', { 'journal-story-grid': !research }]}>
-        {posts.map((post,i) => <article class:list={['publication-row', research ? 'working-paper-row' : 'journal-story']} data-topic={post.data.topics[0]} data-search={`${post.data.title} ${post.data.description} ${post.data.topics.join(' ')} ${post.data.researchQuestion ?? ''}`.toLowerCase()}>
-          {research ? <>
-            <div class="paper-reference"><span>WP / {String(i+1).padStart(2,'0')}</span><span>{post.data.status}</span><time datetime={post.data.pubDate.toISOString()}>{date(post.data.pubDate)}</time></div>
-            <div><p class="topic-line">{post.data.topics[0]}</p><h2><a href={`/blog/${post.id}/`}>{post.data.title}</a></h2><p class="paper-question"><span>Research question</span>{post.data.researchQuestion}</p><a class="text-link" href={`/blog/${post.id}/`}>Read the working paper <span aria-hidden="true">↗</span></a></div>
-            <dl class="paper-method"><div><dt>Approach</dt><dd>{post.data.method}</dd></div><div><dt>To evaluate</dt><dd>{post.data.evaluation}</dd></div><div><dt>Reading time</dt><dd>{minutes(post.body)} min</dd></div></dl>
-          </> : <>
-            <div class="story-type"><span>{post.data.status}</span><span>{post.data.project ? projects.find(p => p.id === post.data.project)?.name : 'From the notebook'}</span></div>
-            <p class="topic-line">{post.data.topics[0]}</p><h2><a href={`/blog/${post.id}/`}>{post.data.title}</a></h2><p>{post.data.description}</p><div class="story-footer"><span>{minutes(post.body)} min read · {date(post.data.pubDate)}</span><a href={`/blog/${post.id}/`} aria-label={`Read ${post.data.title}`}>↗</a></div>
-          </>}
-        </article>)}
-      </div>
-      <div class="collection-empty" hidden><p class="eyebrow">Another way in</p><h2>No pages found.</h2><p>Try a broader phrase, or return to the full collection.</p><button class="button" type="button" id="reset-publications">Show all publications <span aria-hidden="true">↗</span></button></div>
-      <p id="search-status" class="search-status" role="status" aria-live="polite">{posts.length} {research ? 'working papers' : 'stories'}</p>
-    </section>
-    <section class="research-invite"><p class="eyebrow">{research ? 'Question the assumptions' : 'Follow the work'}</p><h2>{research ? 'A better experiment starts with a better question.' : 'The projects behind the pages.'}</h2><p>{research ? 'Have a counterexample, a useful dataset, or a related experiment in mind?' : 'See the purpose, architecture, and scope behind Fanfares, Readout, and paid Blossom storage.'}</p><a class="button" href={research ? 'mailto:iefan.work@gmail.com' : '/work/'}>{research ? 'Share your thoughts ↗' : 'Explore the workbench ↗'}</a></section>
-  </main><Footer folio={research ? 'research' : 'journal'}/></div></body>
+	<head><BaseHead title="Research — Iefan" description="Long-form field notes on security architecture, sovereign systems, embedded hardware, privacy, and applied intelligence." /></head>
+	<body>
+		<div class="site-shell blog-shell">
+			<Header />
+			<main class="journal-main" id="top">
+				<section class="journal-masthead" aria-labelledby="journal-title">
+					<div class="journal-mark" aria-hidden="true"><span>WR</span><small>Est. 2025</small></div>
+					<div><p class="eyebrow">Research desk · Working proposals</p><h1 id="journal-title">Open questions for systems that respect their users.</h1></div>
+					<p class="journal-deck">Research questions, proposed methods, and evaluation plans. These are working drafts, not peer-reviewed papers or experimentally validated results.</p>
+				</section>
+
+				<section class="lead-story" aria-labelledby="lead-story-title">
+					<div class="lead-story-ledger"><p class="eyebrow">Lead proposal</p><span class="lead-number">001</span><div><time datetime={leadPost.data.pubDate.toISOString()}>{formatDate(leadPost.data.pubDate)}</time><span>{readingMinutes(leadPost)} min read</span></div></div>
+					<article>
+						<p class="publication-label">{leadPost.data.status}</p><p class="topic-line">{leadPost.data.topics.join(' · ')}</p>
+						<h2 id="lead-story-title"><a href={`/blog/${leadPost.id}/`} data-testid="blog-lead-story-link">{leadPost.data.title}</a></h2>
+						<p>{leadPost.data.description}</p>
+						<a class="read-link" href={`/blog/${leadPost.id}/`} data-testid="blog-lead-read-link">Read the proposal <span aria-hidden="true">↗</span></a>
+					</article>
+				</section>
+
+				<section class="journal-archive" aria-labelledby="archive-title">
+					<div class="archive-intro"><p class="eyebrow">From the archive</p><h2 id="archive-title">Further investigations</h2><p>Each note begins with a concrete systems problem and follows the tradeoffs all the way down.</p><a href="/rss.xml" class="rss-link" data-testid="blog-rss-link">Follow via RSS ↗</a><a href="/research/" class="rss-link">Research proposals ↗</a></div>
+					<div class="archive-grid">
+						{archivePosts.map((post, index) => (
+							<article class="archive-card">
+								<div class="archive-card-meta"><span>{String(index + 2).padStart(2, '0')}</span><time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time></div>
+								<p class="publication-label">{post.data.status}</p><h3><a href={`/blog/${post.id}/`} data-testid={`blog-archive-${post.id}-link`}>{post.data.title}</a></h3>
+								<p>{post.data.description}</p>
+								<div class="article-topics"><span>{post.data.topics.join(' · ')}</span><span>{readingMinutes(post)} min read</span></div>
+							</article>
+						))}
+					</div>
+				</section>
+
+				<section class="editorial-note" aria-label="Editorial approach"><p class="eyebrow">Editorial compass</p><blockquote>“The useful technical essay leaves the reader with a model they can carry into the next hard problem.”</blockquote><p>Written from implementation work, published from the repository, and kept deliberately independent of an attention-driven platform.</p></section>
+			</main>
+			<Footer folio="journal / 001" />
+		</div>
+	</body>
 </html>
-<script>
-  const input = document.querySelector<HTMLInputElement>('#publication-search');
-  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
-  const rows = document.querySelectorAll<HTMLElement>('.publication-row');
-  const empty = document.querySelector<HTMLElement>('.collection-empty');
-  const collectionLabel = document.querySelector('.research-index') ? 'working paper' : 'story';
-  let active = 'all';
-  function update() {
-    let count = 0;
-    const query = (input?.value ?? '').trim().toLowerCase();
-    rows.forEach(row => {
-      const show = (active === 'all' || row.dataset.topic === active) && (row.dataset.search ?? '').includes(query);
-      row.hidden = !show;
-      if (show) count++;
-    });
-    const status = document.querySelector('#search-status');
-    if (empty) empty.hidden = count > 0;
-    if (status) status.textContent = count ? `${count} ${count === 1 ? collectionLabel : collectionLabel === 'story' ? 'stories' : 'working papers'} shown` : 'No matching publications.';
-  }
-  buttons.forEach(button => button.addEventListener('click', () => {
-    active = button.dataset.filter ?? 'all';
-    buttons.forEach(b => b.setAttribute('aria-pressed', String(b === button)));
-    update();
-  }));
-  input?.addEventListener('input', update);
-  document.querySelector('#reset-publications')?.addEventListener('click', () => {
-    active = 'all';
-    if (input) input.value = '';
-    buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.filter === 'all')));
-    update();
-    input?.focus();
-  });
-</script>

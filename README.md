@@ -53,11 +53,10 @@ Article pages include browser print styling for Print / Save as PDF.
 
 ## Browser narration
 
-The personal introduction and article pages use the Web Speech API for optional
+The reusable AudioReader component supports optional
 read-aloud playback. Playback starts only after a tap. Readers can pause, resume,
 stop, change speed, and choose an English voice available on their device. Long
-prose is split into short passages. Code blocks and tables are omitted. Article
-controls stay accessible at the bottom of phone screens during playback.
+prose is split into short passages. Code blocks and tables are omitted. The restored design currently uses written articles.
 This is browser-generated narration, not an audio recording of Iefan.
 
 ## Projects and publication types
@@ -69,11 +68,8 @@ Research entries use `kind: research`, with `researchQuestion`, `method`, and
 Related reading stays within the research or journal collection. Use ISO date
 strings (`YYYY-MM-DD`) to keep publication dates stable across time zones.
 
-## Publication details
+## Design
 
-Reading estimates share `src/utils/publication.ts`. Article contents indicate the
-current section, with a lightweight reading progress line. The default social card
-is `public/social-card.png`; metadata uses the production canonical domain.
-The 404 page and empty collection state provide routes back into the notebook.
-Local fonts, reduced-motion styles, keyboard focus, print styling, and phone
-narration controls are part of the shared publication design.
+The site retains the original warm-paper, rust, and moss field-notes design.
+Project stories and working research proposals extend that design; research
+drafts are labeled explicitly. The production Nostr identity mapping is preserved.
