@@ -1,0 +1,161 @@
+---
+interface Props { target: string; label?: string; compact?: boolean; }
+const { target, label = 'Listen to this article', compact = false } = Astro.props;
+---
+<audio-reader data-target={target} class:list={['audio-reader', { compact }]}>
+  <div class="audio-main">
+    <button class="audio-play" type="button" aria-label={label} disabled><span class="audio-icon" aria-hidden="true">▶</span></button>
+    <div class="audio-caption"><strong>{label}</strong><span class="audio-state" role="status" aria-live="polite">Preparing browser narration…</span></div>
+    <button class="audio-stop" type="button" aria-label="Stop narration" hidden>■</button>
+    <details class="audio-options">
+      <summary aria-label="Narration settings">Settings <span aria-hidden="true">⌄</span></summary>
+      <div class="audio-settings">
+        <label>Playback speed<select class="audio-speed" aria-label="Playback speed"><option value="0.85">0.85×</option><option value="1" selected>1×</option><option value="1.15">1.15×</option><option value="1.3">1.3×</option><option value="1.5">1.5×</option></select></label>
+        <label>Voice<select class="audio-voice" aria-label="Narration voice"><option value="">Browser default</option></select></label>
+        <p>Browser text-to-speech, not a recording of Iefan. Voice availability varies by device. Code and tables are omitted. Changing settings restarts the current passage.</p>
+      </div>
+    </details>
+  </div>
+  <progress class="audio-progress" max="1" value="0" aria-label="Narration progress" hidden></progress>
+</audio-reader>
+<script>
+  class AudioReader extends HTMLElement {
+    connectedCallback() {
+      const play = this.querySelector<HTMLButtonElement>('.audio-play')!;
+      const stop = this.querySelector<HTMLButtonElement>('.audio-stop')!;
+      const icon = this.querySelector<HTMLElement>('.audio-icon')!;
+      const state = this.querySelector<HTMLElement>('.audio-state')!;
+      const speed = this.querySelector<HTMLSelectElement>('.audio-speed')!;
+      const voiceSelect = this.querySelector<HTMLSelectElement>('.audio-voice')!;
+      const progress = this.querySelector<HTMLProgressElement>('.audio-progress')!;
+      const settings = this.querySelector<HTMLDetailsElement>('.audio-options')!;
+      const source = document.querySelector(this.dataset.target ?? 'article.prose');
+      if (!('speechSynthesis' in window) || !source) {
+        state.textContent = 'Narration is unavailable in this browser.';
+        settings.hidden = true;
+        return;
+      }
+      const synth = window.speechSynthesis;
+      const paragraphs = [...source.querySelectorAll('h1,h2,h3,p,li')]
+        .filter(el => !el.closest('pre,table,[data-no-narration],audio-reader') && !(el.tagName === 'P' && el.closest('li')))
+        .map(el => (el as HTMLElement).innerText.trim()).filter(Boolean);
+      // Short utterances avoid engine limits on long articles. Break only at word boundaries.
+      const chunks = paragraphs.flatMap(text => {
+        const result: string[] = [];
+        let chunk = '';
+        for (const word of text.split(/\s+/)) {
+          if (chunk.length + word.length > 320 && chunk) { result.push(chunk); chunk = ''; }
+          chunk += (chunk ? ' ' : '') + word;
+        }
+        if (chunk) result.push(chunk);
+        return result;
+      });
+      if (!chunks.length) { state.textContent = 'No text available to narrate.'; settings.hidden = true; return; }
+      const minutes = Math.max(1, Math.ceil(paragraphs.join(' ').split(/\s+/).length / 165));
+      const idleText = `About ${minutes} min · Browser narration`;
+      let voices: SpeechSynthesisVoice[] = [];
+      let index = 0;
+      let generation = 0;
+      let mode: 'idle' | 'playing' | 'paused' = 'idle';
+      let utterance: SpeechSynthesisUtterance | null = null;
+      const refreshVoices = () => {
+        voices = synth.getVoices().filter(v => v.lang.toLowerCase().startsWith('en'));
+        const selected = voiceSelect.value;
+        voiceSelect.replaceChildren(new Option('Browser default', ''));
+        voices.forEach(v => voiceSelect.add(new Option(`${v.name} · ${v.lang}`, v.voiceURI)));
+        if (voices.some(v => v.voiceURI === selected)) voiceSelect.value = selected;
+      };
+      const render = (message?: string) => {
+        this.dataset.active = String(mode !== 'idle');
+        icon.textContent = mode === 'playing' ? 'Ⅱ' : '▶';
+        play.setAttribute('aria-label', mode === 'playing' ? 'Pause narration' : mode === 'paused' ? 'Resume narration' : 'Start narration');
+        stop.hidden = mode === 'idle';
+        progress.hidden = mode === 'idle';
+        progress.max = chunks.length;
+        progress.value = index;
+        state.textContent = message ?? (mode === 'idle' ? idleText : `${mode === 'paused' ? 'Paused' : 'Playing'} · Passage ${index + 1} of ${chunks.length}`);
+      };
+      const reset = (message?: string) => {
+        generation++;
+        synth.cancel();
+        utterance = null;
+        mode = 'idle'; index = 0;
+        render(message);
+      };
+      const speak = () => {
+        const token = generation;
+        utterance = new SpeechSynthesisUtterance(chunks[index]);
+        utterance.lang = 'en-US';
+        utterance.rate = Number(speed.value);
+        const selected = voices.find(v => v.voiceURI === voiceSelect.value);
+        if (selected) utterance.voice = selected;
+        utterance.onend = () => {
+          if (token !== generation || mode === 'idle') return;
+          index++;
+          if (index >= chunks.length) { reset('Finished · Listen again'); return; }
+          render();
+          if (mode === 'playing') speak();
+        };
+        utterance.onerror = event => {
+          if (token !== generation || event.error === 'interrupted' || event.error === 'canceled') return;
+          reset('Unable to play. Try another voice or browser.');
+        };
+        synth.speak(utterance);
+      };
+      play.addEventListener('click', () => {
+        if (mode === 'playing') { synth.pause(); mode = 'paused'; render(); return; }
+        if (mode === 'paused') { mode = 'playing'; synth.resume(); if (!synth.speaking && !synth.pending) speak(); render(); return; }
+        generation++; synth.cancel(); synth.resume(); index = 0; mode = 'playing'; render(); speak();
+      });
+      stop.addEventListener('click', () => reset());
+      const changeSettings = () => {
+        if (mode === 'idle') return;
+        generation++; synth.cancel();
+        if (mode === 'playing') speak();
+        render(mode === 'paused' ? `Paused · Resume to apply settings` : undefined);
+      };
+      speed.addEventListener('change', changeSettings);
+      voiceSelect.addEventListener('change', changeSettings);
+      refreshVoices();
+      synth.addEventListener('voiceschanged', refreshVoices);
+      window.addEventListener('pagehide', () => { reset(); synth.removeEventListener('voiceschanged', refreshVoices); }, { once: true });
+      play.disabled = false;
+      render();
+    }
+  }
+  if (!customElements.get('audio-reader')) customElements.define('audio-reader', AudioReader);
+</script>
+<style>
+  .audio-reader { display: block; padding: 16px 18px; border: 1px solid var(--rule); background: var(--paper-light); font-family: var(--sans); }
+  .audio-main { display: flex; align-items: center; gap: 14px; }
+  .audio-play { width: 44px; height: 44px; flex: 0 0 44px; border: 0; border-radius: 50%; background: var(--rust); color: white; display: grid; place-items: center; font-size: 13px; }
+  .audio-play:disabled { opacity: .5; cursor: default; }
+  .audio-caption { min-width: 0; flex: 1; }
+  .audio-caption strong { display: block; font-size: 12px; font-weight: 400; line-height: 1.4; }
+  .audio-state { display: block; font-size: 10px; line-height: 1.5; color: var(--muted); margin-top: 3px; }
+  .audio-stop { min-width: 44px; min-height: 44px; color: var(--muted); border: 0; background: none; }
+  .audio-options summary { min-height: 44px; display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 11px; color: var(--muted); list-style: none; }
+  .audio-options summary::-webkit-details-marker { display: none; }
+  .audio-settings { border: 1px solid var(--rule); padding: 18px; background: var(--paper-light); position: absolute; right: 0; top: 58px; width: min(320px, 100%); z-index: 3; box-shadow: 0 8px 20px #20231f0d; }
+  .audio-options label { display: flex; flex-direction: column; gap: 8px; font-size: 11px; margin-bottom: 14px; }
+  .audio-options select { width: 100%; min-height: 44px; color: var(--ink); background: var(--paper); border: 1px solid var(--rule); padding: 8px; }
+  .audio-options p { font-size: 10px; color: var(--muted); line-height: 1.6; margin: 0; }
+  .audio-reader { position: relative; }
+  .audio-progress { width: 100%; height: 3px; margin-top: 14px; accent-color: var(--rust); }
+  .compact { background: transparent; border-inline: 0; padding: 16px 0; }
+  @media(max-width: 380px) { .audio-main { gap: 10px; } .audio-options summary { font-size: 10px; gap: 5px; } .audio-reader { padding-inline: 12px; } .compact { padding-inline: 0; } }
+  @media(max-width: 600px) {
+    .audio-reader[data-active='true']:not(.compact) { position: fixed; bottom: max(16px, env(safe-area-inset-bottom)); left: 18px; right: 18px; z-index: 20; box-shadow: 0 4px 30px #20231f24; }
+    .audio-reader[data-active='true']:not(.compact) .audio-settings { top: auto; bottom: calc(100% + 10px); }
+  }
+  @media(max-width:480px) {
+    .audio-main { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 10px; }
+    .audio-caption { grid-column: 2; }
+    .audio-stop { grid-column: 3; }
+    .audio-options { grid-column: 1 / -1; border-top: 1px solid var(--rule); }
+    .audio-options summary { justify-content: space-between; font-size: 11px; }
+    .audio-settings { top: calc(100% + 8px); width: 100%; }
+    .audio-options select { font-size: 16px; }
+  }
+  @media print { .audio-reader { display: none; } }
+</style>

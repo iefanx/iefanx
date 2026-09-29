@@ -1,87 +1,88 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import AudioReader from '../components/AudioReader.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import '../styles/home.css';
+import { projects } from '../data/projects';
+import { readingMinutes as readTime } from '../utils/publication';
+const posts = (await getCollection('blog')).sort((a,b) => b.data.pubDate.valueOf()-a.data.pubDate.valueOf() || b.id.localeCompare(a.id));
+const papers = posts.filter(p => p.data.kind === 'research').slice(0,3);
+const lead = posts.find(p => p.id === 'the-question-behind-the-work')!;
+const notes = posts.filter(p => p.data.kind === 'note' && p.id !== lead.id).slice(0,2);
 ---
-
 <!doctype html>
 <html lang="en">
-	<head><BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} /></head>
-	<body>
-		<div class="site-shell">
-			<Header />
-			<main id="top">
-				<aside class="field-rail" aria-label="Current focus">
-					<div>
-						<p class="eyebrow"><span class="status-dot" aria-hidden="true"></span>Available selectively</p>
-						<p class="availability">Independent builder working across software, hardware, and security.</p>
-					</div>
-					<ol class="margin-notes">
-						<li><strong>Security engineering</strong><span>Threat models that survive contact with reality.</span></li>
-						<li><strong>Embedded systems</strong><span>From boards and firmware to trusted execution.</span></li>
-						<li><strong>Sovereign protocols</strong><span>Bitcoin, Lightning, Nostr, and private payments.</span></li>
-					</ol>
-					<div class="rail-note"><p class="eyebrow">Notes from the workbench</p><p>Useful technology should return agency to the person using it.</p></div>
-				</aside>
-
-				<div class="page-content">
-					<section class="hero" aria-labelledby="hero-title">
-						<div class="hero-copy">
-							<p class="kicker">Security engineer · software &amp; hardware developer</p>
-							<h1 id="hero-title">I build secure systems for a <em>sovereign internet.</em></h1>
-							<p class="intro">I work where <strong>atoms, protocols, and people</strong> meet—building resilient products across embedded systems, Bitcoin and Lightning, privacy, AI, and robotics.</p>
-							<p class="hand-note">useful technology, built to last</p>
-						</div>
-						<div class="profile-note">
-							<div class="profile-card">
-								<span class="card-label">Field note / 26</span><p class="profile-label">Current practice</p>
-								<h2>Engineer in the field,<br />systems thinker at heart.</h2>
-								<p>I turn ambiguous, high-stakes technical problems into products people can trust and understand.</p>
-								<div class="coordinates"><span>Remote / Worldwide</span><span>2026</span></div>
-							</div>
-							<blockquote>“Privacy and ownership should be product features—not configuration options.”<cite>Working principle No. 03</cite></blockquote>
-						</div>
-					</section>
-
-					<section class="selected-work" id="work" aria-labelledby="work-title">
-						<div class="section-heading"><div><p class="eyebrow">Selected investigations</p><h2 id="work-title">Work in progress</h2></div><p>Four active lines of inquiry</p></div>
-						<div class="project-list">
-							<article class="project"><span class="project-number">01</span><div><h3>Fanfares</h3><p>A value-first marketplace for encrypted digital culture, built on Nostr and peer-to-peer Bitcoin payments.</p></div><span class="project-tag">Nostr · Bitcoin</span></article>
-							<article class="project"><span class="project-number">02</span><div><h3>Secure enclaves</h3><p>Hardware-rooted trust for cryptographic secrets at the edge, from hardened firmware to tamper-aware boards.</p></div><span class="project-tag">Embedded · TEE</span></article>
-							<article class="project"><span class="project-number">03</span><div><h3>Zero-trust networking</h3><p>Identity-aware access, secure provisioning, and private communication without a privileged perimeter.</p></div><span class="project-tag">Privacy · Systems</span></article>
-							<article class="project"><span class="project-number">04</span><div><h3>On-device AI</h3><p>Private intelligence for low-power hardware, sensor fusion, navigation, and autonomous coordination.</p></div><span class="project-tag">AI · Robotics</span></article>
-						</div>
-					</section>
-
-					<section class="practice" id="practice" aria-labelledby="practice-title">
-						<div class="practice-intro"><p class="eyebrow">The working range</p><h2 id="practice-title">One practice, across the whole system.</h2><p>Good security does not live in a separate layer. It begins with product intent and continues through protocols, interfaces, hardware, and operations.</p></div>
-						<div class="capability-grid" aria-label="Areas of expertise">
-							<div><span>01</span><h3>Security architecture</h3><p>Threat modeling, cryptography, zero-trust networks, and secure provisioning.</p></div>
-							<div><span>02</span><h3>Embedded systems</h3><p>ESP32, RISC-V, firmware hardening, low-power systems, and PCB prototyping.</p></div>
-							<div><span>03</span><h3>Decentralized systems</h3><p>Bitcoin, Lightning, Nostr, Cashu, peer-to-peer architecture, and private payments.</p></div>
-							<div><span>04</span><h3>Applied intelligence</h3><p>On-device inference, robotics, sensor fusion, drones, and resilient coordination.</p></div>
-						</div>
-					</section>
-
-					<section class="principles" aria-labelledby="principles-title">
-						<p class="eyebrow">Operating principles</p><h2 id="principles-title">What the work should protect.</h2>
-						<div class="principle-list">
-							<article><span>I</span><h3>Agency</h3><p>Build for human choice and ownership—not extraction, lock-in, or dependence.</p></article>
-							<article><span>II</span><h3>Integrity</h3><p>Make security part of the architecture, not a checklist applied at the end.</p></article>
-							<article><span>III</span><h3>Durability</h3><p>Prefer comprehensible, resilient systems over impressive but brittle shortcuts.</p></article>
-							<article><span>IV</span><h3>Efficiency</h3><p>Use the minimum trust, energy, and complexity the problem genuinely requires.</p></article>
-						</div>
-					</section>
-
-					<section class="contact" id="contact" aria-labelledby="contact-title">
-						<div><p class="eyebrow">Have a hard problem?</p><h2 id="contact-title">Let’s make the complex feel inevitable.</h2></div>
-						<a class="contact-link" href="mailto:iefan.work@gmail.com" data-testid="home-contact-email-link">Start a conversation <span aria-hidden="true">↗</span></a>
-					</section>
-				</div>
-			</main>
-			<Footer folio="portfolio / 001" />
-		</div>
-	</body>
+  <head><BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION}/></head>
+  <body>
+    <div class="site-shell">
+      <Header/>
+      <main id="top">
+        <div class="issue-line"><span>A personal notebook, made public</span><span>Security / Systems / Sovereignty</span><span>Issue 01 — September 2026</span></div>
+        <section class="cover" aria-labelledby="hero-title">
+          <div class="cover-copy" id="introduction">
+            <p class="eyebrow">The person behind the pages</p>
+            <h1 id="hero-title">I’m Iefan.<br/>I build, question,<br/>and <em>connect.</em></h1>
+            <p class="cover-deck">An independent engineer exploring the space between secure systems and a more sovereign digital life.</p>
+            <p class="cover-bio">My work moves between software and hardware: cryptography, embedded devices, decentralized protocols, and intelligence at the edge. This is where I share the questions, ideas, and experiments along the way.</p>
+            <div data-no-narration><AudioReader target="#introduction" label="A short introduction" compact/></div>
+            <div class="cover-links" data-no-narration><a href="/research/">Browse the research <span aria-hidden="true">↗</span></a><a href="/work/">Visit the workbench <span aria-hidden="true">↓</span></a></div>
+          </div>
+          <aside class="cover-story" aria-labelledby="cover-story-title">
+            <div class="cover-art" role="img" aria-label="Intersecting blue forms representing hardware, protocols, and human agency">
+              <svg viewBox="0 0 480 440" fill="none" aria-hidden="true">
+                <defs><pattern id="engraving" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M0 0V6" stroke="#f6f5ef" stroke-width="1"/></pattern><clipPath id="arch"><path d="M75 350V180C75 25 305 25 305 180V350Z"/></clipPath></defs>
+                <rect width="480" height="440" fill="#e7eaf3"/>
+                <g stroke="#c7ccdf" stroke-width="1"><path d="M30 30H450V410H30Z"/><path d="M30 110H450M30 190H450M30 270H450M30 350H450M110 30V410M190 30V410M270 30V410M350 30V410M430 30V410"/></g>
+                <path d="M75 350V180C75 25 305 25 305 180V350Z" fill="#2949ba"/>
+                <rect x="70" y="50" width="245" height="305" fill="url(#engraving)" clip-path="url(#arch)"/>
+                <circle cx="300" cy="254" r="122" fill="#f6f5ef"/>
+                <circle cx="300" cy="254" r="84" fill="#20231f"/>
+                <circle cx="300" cy="254" r="48" fill="#f6f5ef"/>
+                <path d="M190 76V385M52 254H427" stroke="#7684b3" stroke-dasharray="4 6"/>
+                <circle cx="190" cy="254" r="6" fill="#f6f5ef" stroke="#2949ba"/>
+                <g fill="#56608c" font-family="monospace" font-size="9"><text x="40" y="52">01 / HARDWARE</text><text x="326" y="400">02 / HUMAN AGENCY</text><text x="325" y="53">FIG. 001</text></g>
+              </svg>
+              <div class="art-credit"><span>At the intersection of things.</span><span>Study No. 01</span></div>
+            </div>
+            <div class="cover-story-heading"><p class="eyebrow">The opening essay</p><span>{readTime(lead.body)} min read</span></div>
+            <h2 id="cover-story-title"><a href={`/blog/${lead.id}/`}>The question<br/> behind the work.</a></h2>
+            <p>Who gets to decide what our technology does — and what would it take to make that choice ours?</p>
+            <a class="text-link" href={`/blog/${lead.id}/`}>Read the essay <span aria-hidden="true">↗</span></a>
+          </aside>
+        </section>
+        <section class="editor-letter" id="practice" aria-labelledby="letter-title">
+          <div><p class="eyebrow">A note to the reader</p><span class="letter-signature">Iefan.</span></div>
+          <div><h2 id="letter-title">Follow the question.<br/>Even when it crosses disciplines.</h2><p>I’m drawn to problems that don’t fit neatly into a single layer. A privacy decision becomes a protocol decision. A protocol depends on a device. A device eventually meets a person.</p><p>This publication follows those connections. Some pages are practical engineering notes; others are research proposals with assumptions still to test. The aim is to make the thinking visible.</p></div>
+          <aside><span class="small-label">The recurring question</span><blockquote>“How do we build technology that gives people more agency?”</blockquote><a class="text-link" href="mailto:iefan.work@gmail.com">Write to me <span aria-hidden="true">↗</span></a></aside>
+        </section>
+        <section class="research-section" id="research" aria-labelledby="research-title">
+          <div class="section-heading"><div><p class="eyebrow">01 / Open investigations</p><h2 id="research-title">On the research desk.</h2></div><a class="text-link" href="/research/">All working papers <span aria-hidden="true">↗</span></a></div>
+          <p class="section-deck">Questions made concrete. Proposals with explicit assumptions and a path to validation.</p>
+          <div class="paper-grid">{papers.map((post,i) => <article class="paper-card"><div class="paper-top"><span>0{i+1}</span><span>{post.data.topics[0]}</span></div><h3><a href={`/blog/${post.id}/`}>{post.data.title}</a></h3><p>{post.data.description}</p><div class="paper-bottom"><span>Draft proposal · {readTime(post.body)} min</span><a href={`/blog/${post.id}/`} aria-label={`Read ${post.data.title}`}>↗</a></div></article>)}</div>
+        </section>
+        <section class="journal-section" aria-labelledby="journal-title">
+          <div class="journal-intro"><p class="eyebrow">02 / The journal</p><h2 id="journal-title">Thinking<br/> out loud.</h2><p>Project stories, engineering decisions, and lessons from the workbench.</p><a class="text-link" href="/blog/">The complete journal <span aria-hidden="true">↗</span></a></div>
+          <div class="journal-entries">{notes.map(post => <article><div class="entry-meta"><span>{post.data.topics[0]}</span><span>{readTime(post.body)} min read</span></div><h3><a href={`/blog/${post.id}/`}>{post.data.title}</a></h3><p>{post.data.description}</p><a class="text-link" href={`/blog/${post.id}/`}>Read the note <span aria-hidden="true">↗</span></a></article>)}</div>
+        </section>
+        <section class="work-section" id="work" aria-labelledby="work-title">
+          <div class="section-heading"><div><p class="eyebrow">03 / Away from the page</p><h2 id="work-title">At the workbench.</h2></div><span class="section-aside">Ideas, in contact with the real world.</span></div>
+          <div class="work-list">{projects.map((project, index) => <article><span class="work-number">0{index + 1}</span><div><span class="small-label">{project.field}</span><h3><a href={`/work/#${project.id}`}>{project.name}</a></h3></div><p>{project.description}</p><a class="text-link" href={`/blog/${project.article}/`}>Read the case study <span aria-hidden="true">↗</span></a></article>)}</div>
+          <a class="text-link work-index-link" href="/work/">Explore the full workbench <span aria-hidden="true">↗</span></a>
+        </section>
+        <section class="practice-notes" aria-labelledby="practice-notes-title">
+          <div><p class="eyebrow">A thread through the work</p><h2 id="practice-notes-title">What makes a system<br/>worth building?</h2></div>
+          <dl>
+            <div><dt>A choice that stays yours.</dt><dd>Privacy and ownership matter most when they become decisions people can understand and act on.</dd></div>
+            <div><dt>Care at the boundaries.</dt><dd>The interesting failures happen between layers: a key and a device, a payment and access, a document and a voice.</dd></div>
+            <div><dt>A question you can test.</dt><dd>A promising idea needs explicit assumptions, a useful experiment, and room for the result to change the design.</dd></div>
+          </dl>
+        </section>
+        <section class="contact" id="contact" aria-labelledby="contact-title"><p class="eyebrow">The conversation continues</p><div><h2 id="contact-title">Have a question<br/>worth following?</h2><p>Ideas, thoughtful disagreements, and difficult systems problems are all welcome.<a href="mailto:iefan.work@gmail.com" data-testid="home-contact-email-link">iefan.work@gmail.com <span aria-hidden="true">↗</span></a></p></div></section>
+      </main>
+      <Footer folio="home"/>
+    </div>
+  </body>
 </html>

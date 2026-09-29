@@ -1,12 +1,4 @@
 ---
-interface Props {
-	folio: string;
-}
-
-const { folio } = Astro.props;
+interface Props { folio: string; }
 ---
-
-<footer>
-	<span>iefan.net · notes from the workbench · {folio}</span>
-	<a href="#top" data-testid="site-footer-top-link">Back to top ↑</a>
-</footer>
+<footer aria-label="Publication footer"><span>© {new Date().getFullYear()} Iefan · Built with intention.</span><div><a href="https://github.com/iefanx">GitHub <span aria-hidden="true">↗</span></a><a href="/rss.xml">RSS <span aria-hidden="true">↗</span></a><a href="#top" data-testid="site-footer-top-link">Back to top <span aria-hidden="true">↑</span></a></div></footer>

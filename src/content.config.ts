@@ -15,6 +15,12 @@ const blog = defineCollection({
 			heroImage: image().optional(),
 			topics: z.array(z.string()),
 			featured: z.boolean().default(false),
+            kind: z.enum(['note', 'research']).default('note'),
+            researchQuestion: z.string().optional(),
+            method: z.string().optional(),
+            evaluation: z.string().optional(),
+            project: z.string().optional(),
+            status: z.enum(['Technical note', 'Draft proposal', 'Essay', 'Case study']).default('Technical note'),
 		}),
 });
 

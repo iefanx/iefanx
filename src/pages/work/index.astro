@@ -1,0 +1,17 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { projects } from '../../data/projects';
+import '../../styles/work.css';
+---
+<!doctype html>
+<html lang="en">
+  <head><BaseHead title="The workbench — Iefan" description="Project notes on Fanfares, Readout, and paid Blossom storage: publishing, listening, and protocol infrastructure."/></head>
+  <body><div class="site-shell"><Header/><main id="top">
+    <header class="work-masthead"><p class="eyebrow">The workbench / Selected projects</p><h1>Ideas become useful<br/>when you <em>build them.</em></h1><p>Publishing, listening, and the infrastructure underneath. Three projects that connect my interest in human agency to concrete engineering problems.</p></header>
+    <nav class="project-jump" aria-label="Jump to a project">{projects.map((p,i) => <a href={`#${p.id}`}><span>0{i+1}</span>{p.name}<span aria-hidden="true">↓</span></a>)}</nav>
+    <div class="project-collection">{projects.map((p,i) => <section class="project-study" id={p.id} aria-labelledby={`${p.id}-title`}><div class="project-sidebar"><span class="study-number">0{i+1}</span><p class="eyebrow">{p.field}</p><ul class="project-tags">{p.tags.map(tag => <li>{tag}</li>)}</ul></div><div class="project-body"><h2 id={`${p.id}-title`}>{p.name}</h2><p class="project-description">{p.description}</p><div class="project-facts"><div><h3>The purpose</h3><p>{p.purpose}</p></div><div><h3>The engineering scope</h3><p>{p.scope}</p></div></div><div class="architecture-flow" aria-label={`${p.name} conceptual flow`}>{p.architecture.map((step,j) => <div><span>0{j+1}</span><strong>{step}</strong>{j < p.architecture.length-1 && <i aria-hidden="true">→</i>}</div>)}</div><h3 class="detail-label">Inside the system</h3><ul class="project-details">{p.details.map(d => <li>{d}</li>)}</ul><p class="project-credit">{p.credit}</p><a class="button" href={`/blog/${p.article}/`}>Read the project story <span aria-hidden="true">↗</span></a></div></section>)}</div>
+    <section class="work-outro"><p class="eyebrow">Across the projects</p><h2>The same care.<br/>Different constraints.</h2><p>Fanfares asks how value and access meet. Readout asks how information becomes usable. Paid Blossom storage asks how infrastructure can account for what it promises. Each starts with a different problem, and each needs both understandable interfaces and dependable state.</p><div><a class="text-link" href="/blog/">More from the journal <span aria-hidden="true">↗</span></a><a class="text-link" href="/research/">The questions still open <span aria-hidden="true">↗</span></a></div></section>
+  </main><Footer folio="work"/></div></body>
+</html>
